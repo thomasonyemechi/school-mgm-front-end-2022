@@ -190,7 +190,6 @@
                             <th colspan="12"><button class="save_all btn btn-success  float-right"><i class="fas fa-save"></i> Save All Changes</button></th>
                         </tr>
                     `);
-
                     $('#page_links').html(dropPaginatedPages(res.data.records.links));
                 }).fail(function (res) {
                 })
