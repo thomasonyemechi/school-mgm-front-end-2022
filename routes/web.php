@@ -40,8 +40,8 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
         return view('control.create_class');
     });
 
-    Route::get('/class_profile', function () {
-        return view('control.class_profile');
+    Route::get('/class/{class_id}', function ($class_id) {
+        return view('control.class_profile', compact('class_id'));
     });
 
     Route::get('/add_staff', function () {
@@ -70,8 +70,8 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     });
 
 
-    Route::get('/student_profile', function () {
-        return view('control.student_profile');
+    Route::get('/student_profile/{student_id}', function ($student_id) {
+        return view('control.student_profile', compact('student_id'));
     });
 
 

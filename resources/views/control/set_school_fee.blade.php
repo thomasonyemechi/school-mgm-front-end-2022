@@ -190,6 +190,8 @@
                             <th colspan="12"><button class="save_all btn btn-success  float-right"><i class="fas fa-save"></i> Save All Changes</button></th>
                         </tr>
                     `);
+
+
                     $('#page_links').html(dropPaginatedPages(res.data.records.links));
                 }).fail(function (res) {
                 })
@@ -303,6 +305,18 @@
                     $('.total_amount').html(moneyFormat(t_amount))
                     $('.total_discount').html(moneyFormat(t_discount))
                     $('.total').html(`${moneyFormat(t_amount - t_discount)} `)
+
+
+                    trs.map(row => {
+                        tr = trs[row].children;
+                        td_amt = tr[2].children
+                        discount = tr[3].children[0].value
+                        amount = td_amt[0].value;
+                        tr[4].innerHTML = moneyFormat(amount-discount)
+                    });
+
+
+
                     btnProcess('.save_all', '<i class="fas fa-save"></i> Save All Changes', 'after');
                 }).fail(function(res) {
                     parseError(res.responseJSON)
@@ -361,11 +375,13 @@
                 }).done(function(res) {
                     littleAlert(res.message);
 
-                    discount_node.max =  amount_node.value
+                    t = td_siblings[4]
+                    t.innerHTML  = moneyFormat(amount - discount)
+
 
                     btn.html(`<i class="fas fa-save"></i> Save`)
                     $('.save_changes').removeAttr('disabled');
-                    calculateAmount();
+                    amts = calculateAmount();
 
                 }).fail(function(res) {
                     parseError(res.responseJSON);

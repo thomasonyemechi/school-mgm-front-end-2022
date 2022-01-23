@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Class Profile (JSS 1)</h1>
+                    <h1 class="m-0 class_name">Class Profile (JSS 1)</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -29,7 +29,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-secondary">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3 class="students">0</h3>
 
                         <p>Students</p>
                     </div>
@@ -42,7 +42,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-secondary">
                     <div class="inner">
-                        <h3>$ 125,950</h3>
+                        <h3 class="t_fee">0</h3>
 
                         <p>Assigned Fee</p>
                     </div>
@@ -55,7 +55,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-secondary">
                     <div class="inner">
-                        <h3>$ 105,250</h3>
+                        <h3 class="t_pay">0</h3>
 
                         <p>Reveived Payments</p>
                     </div>
@@ -68,7 +68,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-secondary">
                     <div class="inner">
-                        <h3>65</h3>
+                        <h3 class="teachers">0</h3>
 
                         <p>Subject Teachers</p>
                     </div>
@@ -85,9 +85,9 @@
             <div class="col-md-12 col-12">
                 <div class="card card-secondary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title ">
+                        <h3 class="card-title student_list ">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
-                            JSS 1 Students
+                            Students
                         </h3>
                     </div>
                     <div class="card-body p-1">
@@ -100,10 +100,11 @@
                                         <th>Arm</th>
                                         <th>Gender</th>
                                         <th>Added</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="student_list">
                                     <tr>
                                         <td>1</td>
                                         <td>Jasper Benzene Cynthia</td>
@@ -119,6 +120,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div id="page_links">
+
+                        </div>
                     </div>
 
                 </div>
@@ -130,46 +134,78 @@
     </section>
 
 
-    {{-- <div class="modal fade" id="createClassModal">
-        <div class="modal-dialog modal-dialog-centered ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <p class="modal-title text-bold">Create Class </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="" class="row">
-                        <div class="col-md-6 form-group">
-                            <label>Category</label>
-                            <select name="subject_id" class="form-control select2bs4" >
-                                <option selected disabled>Select Class Category</option>
-                                <option value="">JSS</option>
-                                <option value="">PRY</option>
-                                <option value="">SSS</option>
-                            </select>
-                        </div>
 
-                        <div class="col-md-6 form-group">
-                            <label>Level</label>
-                            <select name="level" class="form-control select2bs4" style="width: 100%;" >
-                                <option selected disabled>Select Level</option>
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value={{$i}}> {{$i}} </option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-12 form-group">
-                            <button type="button" class="btn btn-secondary float-right ">Create Class</button>
-                        </div>
-                    </form>
-                </div>
+    <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 
-            </div>
-        </div>
-    </div> --}}
+    <script>
+        $(function () {
 
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': `Bearer {{access_token()}}`
+                }
+            });
+
+            const class_id = `{{$class_id}}`
+
+            function fetchClassSummary() {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'class_summary/'+class_id
+                }).done(function(res) {
+                    data = res.data;
+                    $('.students').html(data.students)
+                    $('.teachers').html(data.teachers);
+                    $('.t_fee').html(moneyFormat(Math.abs(data.fee)));
+                    $('.t_pay').html(moneyFormat(data.pay));
+                    $('.student_list').html(`<i class="fa fa-list-alt" aria-hidden="true"></i> ${data.class.class} Students`);
+                }).fail(function (res) {
+                    console.log(res);
+                })
+            }
+
+            fetchClassSummary();
+            function students(class_id)
+            {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'class_students/'+class_id+'?page='+`{{ $_GET['page'] ?? 0 }}`
+                }).done(function (res) {
+                    console.log(res);
+
+                    body = $('#student_list')
+                    body.html(``);
+                    res.data.data.map((stu, index) => {
+                        status = (stu.status == 1) ? '<div class="badge bg-success">Active</div>' : '<div class="badge bg-danger">Not Active</div>' ;
+                        body.append(`
+                            <tr>
+                                <td>${index+1}</td>
+                                <td>${stu.surname + ' '+ stu.firstname}</td>
+                                <td>${(stu.arm)? stu.arm.arm :''}</td>
+                                <td>${stu.sex}</td>
+                                <td>${formatDate(stu.created_at)}</td>
+                                <td>${status}</td>
+                                <td>
+                                    <div class="float-right">
+                                        <a href="/control/student_profile/${stu.id}" > Profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        `)
+                    })
+
+                    links = res.data.links;
+                    $('#page_links').html(dropPaginatedPages(res.data.links));
+                }).fail(function (res) {
+                    console.log(res);
+                })
+            }
+
+
+            students(class_id);
+
+        })
+    </script>
 
 
 
