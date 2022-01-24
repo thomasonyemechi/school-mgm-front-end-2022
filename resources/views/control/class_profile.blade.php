@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 class_name">Class Profile (JSS 1)</h1>
+                    <h1 class="m-0 class_name">Class Profile</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -56,7 +56,6 @@
                 <div class="small-box bg-secondary">
                     <div class="inner">
                         <h3 class="t_pay">0</h3>
-
                         <p>Reveived Payments</p>
                     </div>
                     <div class="icon">
@@ -146,13 +145,19 @@
                     url: api_url+'class_summary/'+class_id
                 }).done(function(res) {
                     data = res.data;
+                    $('.class_name').html(`Class Profile (${res.data.class.class})`)
                     $('.students').html(data.students)
                     $('.teachers').html(data.teachers);
                     $('.t_fee').html(moneyFormat(Math.abs(data.fee)));
                     $('.t_pay').html(moneyFormat(data.pay));
                     $('.student_list').html(`<i class="fa fa-list-alt" aria-hidden="true"></i> ${data.class.class} Students`);
                 }).fail(function (res) {
-                    console.log(res);
+                    if(res.status == 404) {
+                        littleAlert('This class does not exist', 1);
+                        setTimeout(() => {
+                            location.href="/control/create_class"
+                        }, 2000);
+                    }
                 })
             }
 
