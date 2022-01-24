@@ -61,7 +61,7 @@
                 </li>
 
 
-            
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-money-bill-wave-alt"></i>
@@ -131,14 +131,14 @@
                         <li class="nav-item">
                             <a href="/control/category_arm" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Class Category/Arm</p>
+                                <p>Category/Arm</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="/control/create_class" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create Classes</p>
+                                <p>Classes</p>
                             </a>
                         </li>
                     </ul>

@@ -95,6 +95,18 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
 
 
 
+    Route::get('/class/fee/{class_id}', function ($class_id) {
+        return view('control.class_fee', compact('class_id'));
+    });
+
+
+    Route::get('/class/payments/{class_id}', function ($class_id) {
+        return view('control.class_payments', compact('class_id'));
+    });
+
+
+
+
 });
 
 

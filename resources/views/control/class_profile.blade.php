@@ -49,7 +49,7 @@
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="/control/class/fees/class_id" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="/control/class/fee/{{$class_id}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
@@ -62,7 +62,7 @@
                     <div class="icon">
                         <i class="ion ion-person-add"></i>
                     </div>
-                    <a href="/control/class/payments/class_id" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="/control/class/payments/{{$class_id}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
@@ -106,16 +106,8 @@
                                 </thead>
                                 <tbody id="student_list">
                                     <tr>
-                                        <td>1</td>
-                                        <td>Jasper Benzene Cynthia</td>
-                                        <td>C</td>
-                                        <td>Female</td>
-                                        <td>10, Jan, 21</td>
-                                        <td>
-                                            <div class="float-right">
-                                                <a href="#" > Go-to-profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
-                                            </div>
-                                        </td>
+                                        <td colspan="12"><div class="text-center"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                            <i> Loading Students ... </i></div></td>
                                     </tr>
                                 </tbody>
                             </table>

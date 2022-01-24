@@ -94,23 +94,13 @@ function formatDate(date) {
 function dropPaginatedPages(links) {
     link_txt = ''
     links.forEach(link => {
-        link_txt += ` < li class = "page-item goToList ${ (link.active == true) ? 'active' :''}"
-    data - data = '${JSON.stringify(link)}' >
-        <
-        a href = "?page=${link.label}"
-    class = "page-link" > $ { link.label } < /a></li > `;
+        link_txt += ` <li class = "page-item goToList ${ (link.active == true) ? 'active' :''}"data - data = '${JSON.stringify(link)}' >
+        <a href = "?page=${link.label}"class = "page-link" > ${ link.label } </a></li > `;
     });
 
-    body = ` <
-        div class = "d-flex justify-content-center mt-3 mb-3" >
-        <
-        div class = "card-tools" >
-        <
-        ul class = "pagination" >
-        $ { link_txt } <
-        /ul> <
-        /div> <
-        /div>
+    body = ` <div class = "d-flex justify-content-center mt-3 mb-3" >
+        <div class = "card-tools" >
+        <ul class = "pagination" >${ link_txt }</ul> </div> </div>
     `
     return (links.length > 3) ? body : '';
 }

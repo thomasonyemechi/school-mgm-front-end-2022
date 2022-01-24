@@ -160,7 +160,7 @@ Class
                                 </td>
                                 <td>
                                     <div class="float-right">
-                                        <a href="/control/class_profile/${cla.id}"> class-profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
+                                        <a href="/control/class/${cla.id}"> class-profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
                                     </div>
                                 </td>
                             </tr>
