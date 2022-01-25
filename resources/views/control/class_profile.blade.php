@@ -198,9 +198,7 @@
                 })
             }
 
-
             students(class_id);
-
         })
     </script>
 
