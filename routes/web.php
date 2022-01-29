@@ -70,7 +70,7 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     });
 
 
-    Route::get('/student_profile/{student_id}', function ($student_id) {
+    Route::get('/student/{student_id}', function ($student_id) {
         return view('control.student_profile', compact('student_id'));
     });
 
@@ -102,6 +102,12 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
 
     Route::get('/class/payments/{class_id}', function ($class_id) {
         return view('control.class_payments', compact('class_id'));
+    });
+
+
+
+    Route::get('/class/teachers/{class_id}', function ($class_id) {
+        return view('control.class_teachers', compact('class_id'));
     });
 
 

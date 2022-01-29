@@ -74,7 +74,7 @@
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    <a href="/control/class/teachers/class_id" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="/control/class/teachers/{{$class_id}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@
                                 <td>${status}</td>
                                 <td>
                                     <div class="float-right">
-                                        <a href="/control/student_profile/${stu.id}" > Profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
+                                        <a href="/control/student/${stu.id}" > Profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a>
                                     </div>
                                 </td>
                             </tr>
