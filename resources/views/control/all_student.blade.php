@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="row" id="student_list_body" >
-            
+
         </div>
 
         <div class="row">
@@ -92,7 +92,7 @@
                                         <p class="text-muted mb-0 text-center">${stu.class.class} <sup>${(stu.arm)? stu.arm.arm :''}</sup> | ${stu.sex}</p>
                                         ${btn}
                                         <div class="text-center">
-                                            <a href="/control/student_profile/${stu.id}">Go-to-profile <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a href="/control/student/${stu.id}">Go-to-profile <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -119,16 +119,16 @@
 
                 btn.attr('disabled', 'disabled');
                 btn.html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>`);
-                
+
                 $.ajax({
-                    method: 'get', 
+                    method: 'get',
                     url: api_url+'search_student/'+q
                 }).done(function(res) {
                     console.log(res);
                     btn.removeAttr('disabled');
                     btn.html(`<i class="fa fa-search"></i>`);
 
-                    if(res.data.length == 0) { 
+                    if(res.data.length == 0) {
                         littleAlert(`No result found for this search <b> '${q}' </b>`, 1);
                         return;
                     }
@@ -151,7 +151,7 @@
                                         <p class="text-muted mb-0 text-center">${stu.class.class} <sup>${(stu.arm)? stu.arm.arm :''}</sup> | ${stu.sex}</p>
                                         ${btn}
                                         <div class="text-center">
-                                            <a href="/control/student_profile/${stu.id}">Go-to-profile <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a href="/control/student/${stu.id}">Go-to-profile <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -159,7 +159,7 @@
                         `)
                     });
 
-                
+
                 }).fail(function(res) {
                     parseError(res.responseJSON);
                     btn.removeAttr('disabled');

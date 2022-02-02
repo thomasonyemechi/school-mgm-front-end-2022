@@ -60,86 +60,27 @@
                             </div>
 
                             <div class="tab-pane" id="levies">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title text-bold">School Fees</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-hover">
-                                                <tr>
-                                                    <th>Fee</th>
-                                                    <th>Amount</th>
-                                                    <th>Discount</th>
-                                                    <th>Total</th>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Special Tutor Fee</td>
-                                                    <td>$ 7,500</td>
-                                                    <td>$ 300</td>
-                                                    <td>$ 7,200</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <th></th>
-                                                    <th>$ 7,500</th>
-                                                    <th>$ 300</th>
-                                                    <th>$ 7,200</th>
-                                                </tr>
-
-                                                <tr>
-                                                    <th colspan="3">Balance Brought Foward</th>
-                                                    <td>$ 10,500</td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="3">Amount Paid</th>
-                                                    <th>$ 12,700</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="3">Expected Payments</th>
-                                                    <th>$ 5,000</th>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title text-bold">Recent Payments</h4>
-                                    </div>
-                                    <div class="card-body p-1">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-hover">
-                                                <tr>
-                                                    <th>Fee</th>
-                                                    <th>Amount</th>
-                                                    <th>Date</th>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Special Tutor Fee</td>
-                                                    <td>$ 7,500</td>
-                                                    <td>$ 300</td>
-                                                </tr>
-
-                                            </table>
-                                        </div>
-                                    </div>
+                                <div class="text-center">
+                                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <i> Loading ... </i>
                                 </div>
                             </div>
 
 
                             <div class="tab-pane" id="result">
-                                <h5>Result and Transcript</h5>
-                                <a href="/control/gurdian_profile">Go-to-Profile <i
-                                        class="fas fa-arrow-circle-right    "></i> </a>
+                                <div class="text-center">
+                                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <i> Loading ... </i>
+                                </div>
                             </div>
 
 
                             <div class="tab-pane" id="settings">
+                                <div class="text-center">
+                                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <i> Loading ... </i>
 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -149,7 +90,7 @@
     </section>
 
 
-    <div class="modal fade" id="addPayment">
+    {{-- <div class="modal fade" id="addPayment">
         <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -181,6 +122,41 @@
 
             </div>
         </div>
+    </div> --}}
+
+
+    <div class="modal fade" id="makePayment">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title text-bold">Make Payments </p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="make_pay" class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Fee Category</label>
+                            <select name="fee_cat" id="fee_cat" class="form-control select2bs4">
+                                <option selected disabled>Select Fee Category</option>
+                                <option value="">Tution Fee</option>
+                                <option value="">Sport Levy</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label>Amount</label>
+                            <input type="number" name="amount" class="form-control" placeholder="Enter Amount i.e 15750">
+                        </div>
+                        <div class="col-12 form-group">
+                            <button type="submit" class="btn btn-secondary float-right make_pay">Make Payment</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
     </div>
 
 
@@ -202,7 +178,6 @@
                     method: 'get',
                     url: api_url+'get_student/{{$student_id}}'
                 }).done(function (res) {
-                    console.log(res);
                     data = res.data
                     pc = $('.p-card')
 
@@ -221,8 +196,11 @@
 
                     activityTap(data)
                     settingTab(data)
+
+                    setTimeout(() => {
+                        fetchReq();
+                    }, 2000);
                 }).fail(function (res) {
-                    console.log(res);
                 })
             }
 
@@ -234,7 +212,6 @@
                 body = $('#activity')
                 guard = data.guardian
                 ot = JSON.parse(data.others)
-                console.log(ot);
                 body.html(`
 
                     <div class="card">
@@ -368,32 +345,7 @@
 
                         </div>
                     </div>
-
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title text-bold">Related Student(s)</h3>
-                        </div>
-                        <div class="card-body p-1">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Class</th>
-                                        <th>Gender</th>
-                                        <th></th>
-                                    </tr>
-                                    <tr id="related_students">
-                                        <td colspan="12"><div class="text-center">
-                                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                                            <i> Loading ... </i></div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+\
                 `)
             }
 
@@ -402,38 +354,37 @@
                 body = $('#settings')
                 guard = data.guardian
                 ot = JSON.parse(data.others)
-                console.log(ot);
                 body.html(`
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title text-bold">Edit Basic Info</h4>
                     </div>
                     <div class="card-body">
-                        <form action="" class="row">
+                        <form action="" id="basic_info" class="row">
                             <div class=" col-md-4 form-group">
-                                <label>Surname</label>
-                                <input type="text" class="form-control" value="${data.surname}" placeholder="Surname">
+                                <label>Surname </label>
+                                <input type="text" name="surname" class="form-control" value="${data.surname}" placeholder="Surname">
                             </div>
 
                             <div class=" col-md-4 form-group">
                                 <label>Firstname</label>
-                                <input type="text" class="form-control" value="${data.firstname}" placeholder="Firstname">
+                                <input type="text" name="firstname" class="form-control" value="${data.firstname}" placeholder="Firstname">
                             </div>
 
                             <div class=" col-md-4 form-group">
                                 <label>Othernames</label>
-                                <input type="text" class="form-control" value="${data.othername}" placeholder="Othernames">
+                                <input type="text" name="othername" class="form-control" value="${data.othername}" placeholder="Othernames">
                             </div>
 
                             <div class=" col-md-6 form-group">
                                 <label>Gurdian</label>
-                                <select name="" class="form-control select2bs4" id="">
+                                <select name="guardian" class="form-control select2bs4" id="select_guardian">
                                     <option selected value="${guard.id}">${guard.guardian_name} | ${guard.guardian_email}</option>
                                 </select>
                             </div>
                             <div class=" col-md-2 form-group">
                                 <label>Gender</label>
-                                <select name="" class="form-control select2bs4" id="">
+                                <select name="gender" class="form-control select2bs4" id="">
                                     <option selected>${data.sex}</option>
                                     <option>Male</option>
                                     <option>Female</option>
@@ -441,10 +392,10 @@
                             </div>
                             <div class=" col-md-4 form-group">
                                 <label>Registration Number</label>
-                                <input type="text" class="form-control" value="${data.registration_number}-121" placeholder="Registration Number">
+                                <input type="text" name="reg" class="form-control" value="${data.registration_number}" placeholder="Registration Number">
                             </div>
                             <div class="col-md-12">
-                                <button class="btn btn-secondary float-right ">Update</button>
+                                <button class="btn btn-secondary float-right basic_info">Update</button>
                             </div>
                         </form>
                     </div>
@@ -458,14 +409,14 @@
                         <form action="" class="row">
                             <div class="col-md-4 form-group">
                                 <label>Class</label>
-                                <select name="" id="" class="form-control  select2bs4">
+                                <select name="" id="select_class" class="form-control  select2bs4">
                                     <option selected value="${(data.class) ? data.class.id : ''}">${(data.class) ? data.class.class : ''}</option>
                                 </select>
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label>Arm</label>
-                                <select name="" class="form-control select2bs4">
+                                <select name="" id="select_arm" class="form-control select2bs4">
                                     <option selected value="${(data.arm) ? data.arm.id : ''}">${(data.arm) ? data.arm.arm : ''}</option>
                                 </select>
                             </div>
@@ -557,9 +508,6 @@
                 form = $('#auth_det')
                 username = $(form).find('input[name="username"]').val()
                 pass = $(form).find('input[name="password"]').val();
-
-                // console.log(username, pass);
-                // return;
                 if(!username || !pass){ littleAlert('The username and password field is required', 1); return; }
                 $.ajax({
                     method: 'post',
@@ -585,7 +533,6 @@
 
             $('body').on('click', '.miscellanous', function(e) {
                 e.preventDefault();
-                console.log('huey');
                 form = $('#miscellanous');
                 $.ajax({
                     method: 'post',
@@ -612,6 +559,261 @@
                 })
             })
 
+            function fetchReq()
+            {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'registration_requirements'
+                }).done(function (res){
+                    guardian = $('#select_guardian')
+                    res.data.guardians.map(guard => {
+                        guardian.append(`<option value="${guard.id}">${guard.guardian_name} | ${guard.guardian_email}</option>`)
+                    });
+
+                    cla = $('#select_class')
+                    res.data.classes.map(clas => {
+                        cla.append(`<option value="${clas.id}">${clas.class}</option>`)
+                    });
+
+                    arms = $('#select_arm')
+                    res.data.arms.map(arm => {
+                        arms.append(`<option value="${arm.id}">${arm.arm}</option>`)
+                    });
+
+
+                }).fail(function(res) {
+                })
+            }
+
+
+
+            $('body').on('click', '.basic_info', function (e) {
+                e.preventDefault();
+                form = $('#basic_info')
+
+                surname = $(form).find('input[name="surname"]').val();
+                firstname = $(form).find('input[name="firstname"]').val();
+                othername = $(form).find('input[name="othername"]').val()
+                gender = $(form).find('select[name="gender"]').val();
+                guard = $(form).find('select[name="guardian"]').val();
+                reg = $(form).find('input[name="reg"]').val();
+
+                if(!guard || !surname || !firstname || !gender) { littleAlert('Pls fill out the required fields'); return; }
+
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'student/update_basic_info',
+                    data: {
+                        surname: surname,
+                        firstname: firstname,
+                        othername: othername,
+                        reg: reg,
+                        gender: gender,
+                        guardian_id: guard,
+                        student_id: '{{$student_id}}',
+                    },
+                    beforeSend:() => {
+                        btnProcess('.basic_info', 'Update', 'before');
+                    }
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess('.basic_info', 'Update', 'after');
+                    fetchStudent();
+                }).fail(function(res) {
+                    parseError(res.responseJSON);
+                    btnProcess('.basic_info', 'Update', 'after');
+                })
+            })
+
+
+
+            function fetchFee() {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'student/fee_sum/{{$student_id}}'
+                }).done(function(res) {
+                    putFee(res.data);
+                }).fail(function(res) {
+                })
+            }
+
+            fetchFee();
+
+
+            function putFee(data) {
+
+                body = $('#levies')
+                body.html(``);
+
+                fee_str = ''; fee_amt = 0 ; fee_dis = 0; fee_total = 0;
+
+                data.fees.forEach((fee, index) => {
+                    fee_amt += fee.amount;
+                    fee_dis += fee.discount;
+                    fee_total += fee.total;
+                    fee_str += `
+                        <tr>
+                            <td>${fee.fee_cat.fee}</td>
+                            <td>${moneyFormat(fee.amount)}</td>
+                            <td>${moneyFormat(fee.discount)}</td>
+                            <td>${moneyFormat(Math.abs(fee.total))}</td>
+                        </tr>
+                    `
+                })
+
+
+                fee_str += `
+                    <tr>
+                        <th></th>
+                        <th>${moneyFormat(fee_amt)}</th>
+                        <th>${moneyFormat(fee_dis)}</th>
+                        <th>${moneyFormat(Math.abs(fee_total))}</th>
+                    </tr>
+                `
+                total_owing = Math.abs(fee_total) + Math.abs(data.brought_fwd);
+
+                fee_str += `
+                <tr>
+                    <th colspan="3">Balance Brought Foward</th>
+                    <td>${moneyFormat(Math.abs(data.brought_fwd))}</td>
+                </tr>
+                <tr>
+                    <th colspan="3">Total Owing</th>
+                    <th>${ moneyFormat(total_owing) }</th>
+                </tr>
+                <tr>
+                    <th colspan="3">Amount Paid</th>
+                    <th>${moneyFormat(data.amt_paid)}</th>
+                </tr>
+                <tr>
+                    <th colspan="3">Expected Payments</th>
+                    <th>${moneyFormat(total_owing - data.amt_paid)}</th>
+                </tr>
+                `
+
+
+                pay_string = ''; pay_total = 0;
+
+                data.pays.forEach((pay) => {
+                    pay_total += pay.total;
+                    pay_string += `
+                        <tr>
+                            <td>${((pay.fee_cat) ? pay.fee_cat.fee : 'General Payment')}</td>
+                            <td>${moneyFormat(pay.total)}</td>
+                            <td>${formatDate(pay.created_at)}</td>
+                        </tr>
+                    `
+                });
+
+
+                pay_string += `
+                    <tr>
+                        <th>Total</th>
+                        <th colspan="2">${moneyFormat(pay_total)}</th>
+                    </tr>
+                `
+
+                body.append(`
+                <div><a href="javascript:;" data-toggle="modal" data-target="#makePayment" class="btn btn-secondary mb-3">Make Fee Payment  </a></div>
+                <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title text-bold">School Fees</h4>
+                        </div>
+                        <div class="card-body p-1">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <th>Fee</th>
+                                        <th>Amount</th>
+                                        <th>Discount</th>
+                                        <th>Total</th>
+                                    </tr>
+
+
+                                    ${ fee_str }
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title text-bold">Recent Payments</h4>
+                        </div>
+                        <div class="card-body p-1">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <th>Fee</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    ${pay_string}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div><a href="/control/student/fee/{{$student_id}}" class="btn btn-block btn-secondary">View School Fee Details <i class="fa fa-arrow-circle-right" aria-hidden="true"></i> </a></div>
+
+                `)
+            }
+
+
+
+            $('body').on('click', '.make_pay', function(e) {
+                e.preventDefault();
+                form = $('#make_pay');
+                fee_cat = $(form).find('select[name="fee_cat"]').val();
+                amt = $(form).find('input[name="amount"]').val();
+                if(!confirm(`Are you sure you want to make payment of ${moneyFormat(amt)} ? payment cannot be altered once submited.`)) { return; }
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'make_fee_payment',
+                    data: {
+                        student_id: '{{$student_id}}',
+                        fee_cat_id: fee_cat,
+                        amount: amt
+                    },
+                    beforeSend:() => {
+                        btnProcess('.make_pay', 'Make Payment', 'before');
+                    }
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess('.make_pay', 'Make Payment', 'after');
+                    fetchFee();
+                    $('#makePayment').modal('hide');
+                    form[0].reset();
+                }).fail(function(res) {
+                    parseError(res.responseJSON);
+                    btnProcess('.make_pay', 'Make Payment', 'after');
+                })
+            });
+
+
+            function fetchFeeCategory() {
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'fetch_fee_category'
+                }).done(function (res) {
+                    console.log(res);
+                    body = $('#fee_cat');
+                    body.html(`<option disabled selected>Select Fee Category</option> <option value="0">General Payment</option>`);
+                    res.data.map(fee => {
+                        body.append(`
+                            <option value="${fee.id}">${fee.fee}</option>
+                        `)
+                    })
+                }).fail(function (res) {
+                    console.log(res);
+                })
+            }
+
+            fetchFeeCategory();
 
         })
     </script>

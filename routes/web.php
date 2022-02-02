@@ -75,6 +75,11 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     });
 
 
+    Route::get('/student/fee/{student_id}/{term_id?}', function ($student_id, $term_id = 0) {
+        return view('control.student_fee', compact('student_id', 'term_id'));
+    });
+
+
     Route::get('/daily_fee_payment', function () {
         return view('control.payment_daily');
     });

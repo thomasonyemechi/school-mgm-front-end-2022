@@ -77,19 +77,17 @@
                             </h3>
 
                             <div class="row">
-                                    <form class="form-group col-12 m-0 p-0 d-flex justify-content-between " action="" id="viewFee">
-                                        <select class="form-control mr-2" name="cla" id="cla" style="height: 30px" >
-                                            <option selected disabled>Class</option>
-                                        </select>
+                                <form class="form-group col-12 m-0 p-0 d-flex justify-content-between " action="" id="viewFee">
+                                    <select class="form-control mr-2" name="cla" id="cla" style="height: 30px" >
+                                        <option selected disabled>Class</option>
+                                    </select>
 
-                                        <select class="form-control mr-2" name="fee_cat" id="fee_cat" style="height: 30px" >
-                                            <option selected disabled>Fee</option>
-                                        </select>
+                                    <select class="form-control mr-2" name="fee_cat" id="fee_cat" style="height: 30px" >
+                                        <option selected disabled>Fee</option>
+                                    </select>
 
-                                        <button class="btn btn-xs btn-secondary float-right viewFee"> View</button>
-                                    </form>
-
-
+                                    <button class="btn btn-xs btn-secondary float-right viewFee"> View</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -389,10 +387,6 @@
                     $('.save_changes').removeAttr('disabled');
 
                 })
-
-
-
-
 
             })
 

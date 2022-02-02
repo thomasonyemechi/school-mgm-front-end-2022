@@ -154,7 +154,7 @@ Students
                                 <td>${stu.sex}</td>
                                 <td>
                                     <div class="float-right">
-                                        <a href="/control/student_profile/${stu.id}">Profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+                                        <a href="/control/student/${stu.id}">Profile <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
                                     </div>
                                 </td>
                             </tr>
