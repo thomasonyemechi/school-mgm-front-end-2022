@@ -209,31 +209,26 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="/control/daily_fee_payment" class="nav-link">
+                            <a href="/control/fee/daily" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Daily Payments</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/control/fee/weekly" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Weekly Payments</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/control/fee/termly" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Termly Payments</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Yearly Payments</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="/control/fee/range" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Fee Across Date Range</p>
                             </a>

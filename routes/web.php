@@ -80,9 +80,25 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     });
 
 
-    Route::get('/daily_fee_payment', function () {
-        return view('control.payment_daily');
+    Route::get('/fee/daily/{day?}', function ($day=0) {
+        if($day == 0) { $day = date('Y-m-j'); }
+        return view('control.payment_daily', compact('day'));
     });
+
+    Route::get('/fee/weekly/{week?}', function ($week=0) {
+        if($week == 0) { $week = date('w'); }
+        return view('control.payment_weekly', compact('week'));
+    });
+
+    Route::get('/fee/termly/{term?}', function ($term=0) {
+        return view('control.payment_termly', compact('term'));
+    });
+
+
+    Route::get('/fee/range/{from?}/{to?}', function ($from='', $to='') {
+        return view('control.payment_date_range', compact(['from', 'to']));
+    });
+
 
     Route::get('/fee', function () {
         return view('control.fee_setting');

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_title')
-Daily Fee Transaction
+Weekly Fee Transaction
 @endsection
 
 
@@ -11,12 +11,12 @@ Daily Fee Transaction
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Daily Fee Transaction</h1>
+                    <h1 class="m-0">Weekly Fee Payments</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/control/dashboard">Home</a></li>
-                        <li class="breadcrumb-item active">Daily Fee Transaction</li>
+                        <li class="breadcrumb-item active">Weekly Fee Payments</li>
                     </ol>
                 </div>
             </div>
@@ -33,8 +33,12 @@ Daily Fee Transaction
                             <div class="card-body">
                                 <form action="" id="dateForm" >
                                     <div class="form-group">
-                                        <label>Select Day</label>
-                                        <input type="date" name="date" class="form-control">
+                                        <label>Select Week</label>
+                                        <select name="week" class="form-control select2bs4" name="" id="">
+                                            @for ($i=1; $i<=54; $i++)
+                                                <option value={{$i}}>Week {{$i}}</option>
+                                            @endfor
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-secondary float-right">View Transaction</button>
@@ -115,9 +119,9 @@ Daily Fee Transaction
             $('#dateForm').on('submit', function(e) {
                 e.preventDefault();
                 form = $(this);
-                date = $(form).find('input[name="date"]').val();
-                if(!date){ littleAlert('Please select a valid date', 1); return; }
-                location.href=`/control/fee/daily/${date}`
+                week = $(form).find('select[name="week"]').val();
+                if(!week){ littleAlert('Please select a valid week', 1); return; }
+                location.href=`/control/fee/weekly/${week}`
                 btnProcess('.dateForm', 'View Transaction', 'before');
             })
 
@@ -125,7 +129,7 @@ Daily Fee Transaction
             function fetchTransaction() {
                 $.ajax({
                     method: 'get',
-                    url: api_url+`transaction/daily/{{$day}}?page={{$_GET['page'] ?? 1}}`
+                    url: api_url+`transaction/weekly/{{$week}}?page={{$_GET['page'] ?? 1}}`
                 }).done(function(res) {
                     console.log(res);
                     createHistoryFeeBody(res);

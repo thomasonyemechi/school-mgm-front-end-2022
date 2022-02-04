@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_title')
-Daily Fee Transaction
+Transaction Accross Date Range
 @endsection
 
 
@@ -11,12 +11,12 @@ Daily Fee Transaction
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Daily Fee Transaction</h1>
+                    <h1 class="m-0">Fee Detail</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/control/dashboard">Home</a></li>
-                        <li class="breadcrumb-item active">Daily Fee Transaction</li>
+                        <li class="breadcrumb-item active">Fee Detail</li>
                     </ol>
                 </div>
             </div>
@@ -31,12 +31,18 @@ Daily Fee Transaction
                     <div class="col-md-4">
                         <div class="card card-secondary card-outline">
                             <div class="card-body">
-                                <form action="" id="dateForm" >
-                                    <div class="form-group">
-                                        <label>Select Day</label>
-                                        <input type="date" name="date" class="form-control">
+                                <form action="" id="dateForm" class="row">
+                                    <div class="col-6 form-group">
+                                        <label>From</label>
+                                        <input type="date" name="from" class="form-control">
                                     </div>
-                                    <div class="form-group">
+
+                                    <div class="col-6 form-group">
+                                        <label>To</label>
+                                        <input type="date" name="to" class="form-control">
+                                    </div>
+
+                                    <div class="col-12 form-group">
                                         <button class="btn btn-secondary float-right">View Transaction</button>
                                     </div>
                                 </form>
@@ -115,17 +121,22 @@ Daily Fee Transaction
             $('#dateForm').on('submit', function(e) {
                 e.preventDefault();
                 form = $(this);
-                date = $(form).find('input[name="date"]').val();
-                if(!date){ littleAlert('Please select a valid date', 1); return; }
-                location.href=`/control/fee/daily/${date}`
+                from = $(form).find('input[name="from"]').val();
+                to = $(form).find('input[name="to"]').val();
+                if(!form || !to){ littleAlert('All fields are required', 1); return; }
+                location.href=`/control/fee/range/${from}/${to}`
                 btnProcess('.dateForm', 'View Transaction', 'before');
             })
 
 
             function fetchTransaction() {
+                from = '{{$from}}'; to = '{{$to}}';
+
+                if(!from || !to) { littleAlert('Pls select date range', 1); $('#transact_body').html(``); return; }
+
                 $.ajax({
                     method: 'get',
-                    url: api_url+`transaction/daily/{{$day}}?page={{$_GET['page'] ?? 1}}`
+                    url: api_url+`transaction/range/{{$from}}/{{$to}}?page={{$_GET['page'] ?? 1}}`
                 }).done(function(res) {
                     console.log(res);
                     createHistoryFeeBody(res);
@@ -160,10 +171,10 @@ Daily Fee Transaction
                         </tr>
                     `)
                 })
-
                 $('#page_links').html(dropPaginatedPages(data.data.links));
-
             }
+
+
         })
     </script>
 
