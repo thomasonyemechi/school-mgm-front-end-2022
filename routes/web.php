@@ -167,6 +167,11 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     })->middleware('other');
 
 
+    Route::get('/tem/1', function () {
+        return view('control.result_template_1');
+    });
+
+
 });
 
 
