@@ -16,122 +16,155 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ], function (){
-    Route::get('/dashboard', function () {
-        return view('control.admin_dashboard');
+
+    Route::group(['middleware' => ['active_term'] ], function (){
+
+        Route::group(['middleware' => ['registration'] ], function (){
+            Route::get('/add_staff', function () {
+                return view('control.add_staff');
+            });
+
+            Route::get('/staff_profile', function () {
+                return view('control.staff_profile');
+            });
+
+
+            Route::get('/register_guardian', function () {
+                return view('control.register_guardian');
+            });
+
+            Route::get('/guardian_profile', function () {
+                return view('control.guardian_profile');
+            });
+
+            Route::get('/register_student', function () {
+                return view('control.register_student');
+            });
+
+            Route::get('/all_student', function () {
+                return view('control.all_student');
+            });
+
+
+            Route::get('/student/{student_id}', function ($student_id) {
+                return view('control.student_profile', compact('student_id'));
+            });
+
+
+            Route::get('/student/fee/{student_id}/{term_id?}', function ($student_id, $term_id = 0) {
+                return view('control.student_fee', compact('student_id', 'term_id'));
+            });
+        });
+
+        Route::group(['middleware' => ['fee'] ], function (){
+            Route::get('/fee/daily/{day?}', function ($day=0) {
+                if($day == 0) { $day = date('Y-m-j'); }
+                return view('control.payment_daily', compact('day'));
+            });
+
+            Route::get('/fee/weekly/{week?}', function ($week=0) {
+                if($week == 0) { $week = date('w'); }
+                return view('control.payment_weekly', compact('week'));
+            });
+
+            Route::get('/fee/termly/{term?}', function ($term=0) {
+                return view('control.payment_termly', compact('term'));
+            });
+
+
+            Route::get('/fee/range/{from?}/{to?}', function ($from='', $to='') {
+                return view('control.payment_date_range', compact(['from', 'to']));
+            });
+
+
+            Route::get('/fee', function () {
+                return view('control.fee_setting');
+            });
+
+
+            Route::get('/set_fee', function () {
+                return view('control.set_school_fee');
+            });
+
+            Route::get('/set_fee/{fee}/{class}', function ($fee, $class) {
+                return view('control.set_school_fee', compact('fee', 'class'));
+            });
+        });
+
+        Route::group(['middleware' => ['other'] ], function (){
+            Route::get('/setting/permission', function () {
+                return view('control.permission_settings');
+            });
+
+            Route::get('/setting/result', function () {
+                return view('control.result_setup');
+            });
+
+            Route::get('/add_subject', function () {
+                return view('control.add_subject');
+            });
+
+            Route::get('/subject/assign', function () {
+                return view('control.view_set_subject_teacher2');
+            });
+
+            Route::get('/category_arm', function () {
+                return view('control.class_category_arm');
+            });
+
+            Route::get('/create_class', function () {
+                return view('control.create_class');
+            });
+
+            Route::get('/class/{class_id}', function ($class_id) {
+                return view('control.class_profile', compact('class_id'));
+            });
+        });
+
+
+
+
+        Route::get('/dashboard', function () {
+            return view('control.admin_dashboard');
+        });
+
+        Route::get('/result/upload/{program?}', function ($program=0) {
+            return view('control.enter_result', compact('program'));
+        });
+
+        Route::get('/broad-sheet/{program?}', function ($program=0) {
+            return view('control.broad_sheet', compact('program'));
+        });
+
+        Route::get('class/broad-sheet/{program}', function ($program=0) {
+            return view('control.admin_check_broad_sheet', compact('program'));
+        });
+
+
+        Route::get('/class/fee/{class_id}', function ($class_id) {
+            return view('control.class_fee', compact('class_id'));
+        });
+
+
+        Route::get('/class/payments/{class_id}', function ($class_id) {
+            return view('control.class_payments', compact('class_id'));
+        });
+
+
+
+        Route::get('/class/teachers/{class_id}', function ($class_id) {
+            return view('control.class_teachers', compact('class_id'));
+        });
+
     });
 
-    Route::get('/general_setup', function () {
+
+
+
+
+    Route::get('/setting/general', function () {
         return view('control.general_setup2');
-    });
-
-    Route::get('/add_subject', function () {
-        return view('control.add_subject');
-    });
-
-    Route::get('/subject_teacher', function () {
-        return view('control.view_set_subject_teacher');
-    });
-
-    Route::get('/category_arm', function () {
-        return view('control.class_category_arm');
-    });
-
-    Route::get('/create_class', function () {
-        return view('control.create_class');
-    });
-
-    Route::get('/class/{class_id}', function ($class_id) {
-        return view('control.class_profile', compact('class_id'));
-    });
-
-    Route::get('/add_staff', function () {
-        return view('control.add_staff');
-    });
-
-    Route::get('/staff_profile', function () {
-        return view('control.staff_profile');
-    });
-
-
-    Route::get('/register_guardian', function () {
-        return view('control.register_guardian');
-    });
-
-    Route::get('/guardian_profile', function () {
-        return view('control.guardian_profile');
-    });
-
-    Route::get('/register_student', function () {
-        return view('control.register_student');
-    });
-
-    Route::get('/all_student', function () {
-        return view('control.all_student');
-    });
-
-
-    Route::get('/student/{student_id}', function ($student_id) {
-        return view('control.student_profile', compact('student_id'));
-    });
-
-
-    Route::get('/student/fee/{student_id}/{term_id?}', function ($student_id, $term_id = 0) {
-        return view('control.student_fee', compact('student_id', 'term_id'));
-    });
-
-
-    Route::get('/fee/daily/{day?}', function ($day=0) {
-        if($day == 0) { $day = date('Y-m-j'); }
-        return view('control.payment_daily', compact('day'));
-    });
-
-    Route::get('/fee/weekly/{week?}', function ($week=0) {
-        if($week == 0) { $week = date('w'); }
-        return view('control.payment_weekly', compact('week'));
-    });
-
-    Route::get('/fee/termly/{term?}', function ($term=0) {
-        return view('control.payment_termly', compact('term'));
-    });
-
-
-    Route::get('/fee/range/{from?}/{to?}', function ($from='', $to='') {
-        return view('control.payment_date_range', compact(['from', 'to']));
-    });
-
-
-    Route::get('/fee', function () {
-        return view('control.fee_setting');
-    });
-
-
-    Route::get('/set_fee', function () {
-        return view('control.set_school_fee');
-    });
-
-    Route::get('/set_fee/{fee}/{class}', function ($fee, $class) {
-        return view('control.set_school_fee', compact('fee', 'class'));
-    });
-
-
-
-
-    Route::get('/class/fee/{class_id}', function ($class_id) {
-        return view('control.class_fee', compact('class_id'));
-    });
-
-
-    Route::get('/class/payments/{class_id}', function ($class_id) {
-        return view('control.class_payments', compact('class_id'));
-    });
-
-
-
-    Route::get('/class/teachers/{class_id}', function ($class_id) {
-        return view('control.class_teachers', compact('class_id'));
-    });
-
-
+    })->middleware('other');
 
 
 });
@@ -172,6 +205,11 @@ Route::get('/reset_password', function () {
 
 Route::get('/terms', function () {
     return '</h1>Terms and Conditions</h1>';
+});
+
+Route::get('/logout', function () {
+    session()->flush();
+    return redirect('/login')->with('success' , 'You have been logged out');
 });
 
 

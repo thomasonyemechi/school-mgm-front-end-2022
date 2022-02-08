@@ -84,7 +84,7 @@
                     method: 'get',
                     url: api_url+'class_fee/'+class_id+'?page='+`{{ $_GET['page'] ?? 0 }}`
                 }).done(function (res) {
-                    $('.class_name').html(`Class Fee (${res.data.class.class})`)
+                    $('.class_name').html(`Class Fee (${res.cap})`)
                     body = $('#student_list')
                     body.html(``);
                     res.data.fees.data.map((fee, index) => {

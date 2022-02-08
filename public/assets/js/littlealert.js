@@ -5,7 +5,7 @@ function littleAlert(msg, t = 0) {
     color = (t == 1) ? 'danger' : 'success';
     icon = (t == 1) ? 'ban' : 'checked';
     ret = `
-        <div id="refresh" class="alert bg-${color}" style="position:fixed; top:55px; right:15px; z-index:999999999999999999">
+        <div class="alert bg-${color}" style="position:fixed; top:55px; right:15px; z-index:999999999999999999">
         <i class="icon fe fe-${color}  text-white"> ${msg}  </i>
         </div>
     `
@@ -107,7 +107,17 @@ function dropPaginatedPages(links) {
 
 
 
+
 const moneyFormat = (num) => {
     var numb = new Intl.NumberFormat();
     return '$ ' + numb.format(num);
+}
+
+
+function checkRes(res) {
+    obj = res;
+    if (res == null) {
+        obj = { t1: 0, t2: 0, t3: 0, exam: 0, total: 0 }
+    }
+    return obj;
 }

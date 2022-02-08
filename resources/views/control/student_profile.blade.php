@@ -345,7 +345,6 @@
 
                         </div>
                     </div>
-\
                 `)
             }
 
@@ -793,6 +792,75 @@
                     btnProcess('.make_pay', 'Make Payment', 'after');
                 })
             });
+
+
+            function fetchResult() {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'results/{{$student_id}}'
+                }).done(function (res) {
+                    console.log(res);
+                    resultTab(res);
+                }).fail(function(res) {
+                    console.log(res);
+                })
+            }
+            fetchResult();
+
+
+
+            function resultTab(data) {
+
+                body = $('#result')
+
+
+                res_str = ''
+
+                data.results.forEach((res, index) => {
+                    res_str += `
+                        <tr>
+                            <td>${index+1}</td>
+                            <td>${res.session.session}</td>
+                            <td>${term_text(res.term.term)}</td>
+                            <td>${res.class.class}</td>
+                            <td>${res.subjects}</td>
+                            <td>${formatDate(res.created_at)}</td>
+                            <td><a class="btn btn-xs btn-info" href="/control/view-result/${res.id}"><i class="fas fa-eye"></i> View</a></td>
+                        </tr>
+                    `
+                })
+
+
+
+                body.html(`
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title text-bold">Results</h3>
+                        </div>
+                        <div class="card-body p-1">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Session</th>
+                                        <th>Term</th>
+                                        <th>Class</th>
+                                        <th>Subjects</th>
+                                        <th>Date</th>
+                                        <th></th>
+                                    </tr>
+
+
+                                    ${ res_str }
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `)
+            }
 
 
             function fetchFeeCategory() {

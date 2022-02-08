@@ -38,7 +38,6 @@
                                         <th>Name</th>
                                         <th>Fee</th>
                                         <th>Amount</th>
-                                        <th>By</th>
                                         <th>Date</th>
                                     </tr>
                                 </thead>
@@ -83,7 +82,7 @@
                     method: 'get',
                     url: api_url+'class_payment/'+class_id+'?page='+`{{ $_GET['page'] ?? 0 }}`
                 }).done(function (res) {
-                    $('.class_name').html(`Class Payments (${res.data.class.class})`)
+                    $('.class_name').html(`Class Payments (${res.cap})`)
                     body = $('#pay_list')
                     body.html(``);
                     res.data.pays.data.map((pay, index) => {
@@ -92,9 +91,8 @@
                             <tr>
                                 <td>${index+1}</td>
                                 <td>${pay.student.surname + ' '+ pay.student.firstname}</td>
-                                <td>${pay.fee_cat.fee}</td>
+                                <td>${(pay.fee_cat) ? pay.fee_cat.fee : 'General Payments' }</td>
                                 <td>${moneyFormat(pay.total)}</td>
-                                <td></td>
                                 <td>${formatDate(pay.created_at)}</td>
                             </tr>
                         `)
@@ -125,6 +123,7 @@
 
                 }).fail(function (res) {
                     parseError(res.responseJSON)
+                    console.log(res);
                 })
             }
 

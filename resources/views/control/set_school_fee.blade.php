@@ -372,7 +372,6 @@
                     }
                 }).done(function(res) {
                     littleAlert(res.message);
-
                     t = td_siblings[4]
                     t.innerHTML  = moneyFormat(amount - discount)
 

@@ -14,7 +14,7 @@
     <link rel="icon" href="{{ asset('assets/img/favicon.png') }}">
 
 </head>
-
+@include('layouts.inc.alert_top')
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="card card-outline card-primary">
@@ -116,9 +116,7 @@
                         url: '/session_login_infomation',
                         data: { data: res }
                     })
-                    setTimeout(() => {
-                        location.href = '/control/dashboard';
-                    }, 2500);
+                    location.href = '/control/dashboard';
                 }).fail( function (res) {
                     parseError(res.responseJSON);
                     btnProcess('#login', 'Sign In', 'after');

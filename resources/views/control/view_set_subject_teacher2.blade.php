@@ -57,14 +57,18 @@ Subjects
                                 </thead>
                                 <tbody id="sub_body">
                                     <tr>
-                                        <td>1</td>
-                                        <td>Mathematics</td>
-                                        <td>JSS 1</td>
-                                        <td>Mr. Adepoju Salami Giwa</td>
-                                        <td><button class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
+                                        <td colspan="12">
+                                            <div class="text-center">
+                                                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                                <i> Loading ... </i>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div id="page_links1">
+
                         </div>
                     </div>
 
@@ -78,7 +82,6 @@ Subjects
         <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header">
-                    {{-- <h6 class="modal-title text-bold">Assign Subject</h6> --}}
                     <p class="modal-title text-bold">Assign Subject</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -125,22 +128,23 @@ Subjects
 
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 
-    <script>
-        $(function () {
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': `Bearer {{access_token()}}`
-                }
-            });
+
+
+<script>
+    $(function () {
+        $.ajaxSetup({
+            headers: {
+                'Authorization': `Bearer {{access_token()}}`
+            }
+        });
 
 
 
-            function fetchTable() {
+        function fetchTable() {
                 $.ajax({
                     method: 'get',
                     url: api_url+`fetch_subject_teacher?page={{$_GET['page'] ?? 1 }}`
                 }).done(function(res) {
-                    console.log(res);
                     body = $('#sub_body');
                     body.html(``);
                     res.data.data.map((sub, index) => {
@@ -150,82 +154,110 @@ Subjects
                                 <td>${sub.subject.subject}</td>
                                 <td>${sub.class.class}</td>
                                 <td>${sub.teacher.name}</td>
-                                <td><button class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button> </td>
+                                <td>
+                                    <button class="btn btn-xs btn-danger remove_subject" data-id="${sub.id}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    <a class="btn btn-xs btn-info" href="/control/class/broad-sheet/${sub.id}"><i class="fas fa-eye"></i> Results</a>
+                                </td>
+
                             </tr>
                         `)
                     })
+
+                    $('#page_links1').html(dropPaginatedPages(res.data.links));
                 }).fail(function(res) {
-                    console.log(res);
                 })
             }
 
             fetchTable();
 
-            function fetchRequirements() {
-                $.ajax({
-                    method: 'get',
-                    url: api_url+'assign_subject_req'
-                }).done(function(res) {
-                    console.log(res);
 
+
+        function fetchRequirements() {
+            $.ajax({
+                method: 'get',
+                url: api_url+'assign_subject_req'
+            }).done(function(res) {
                 form = $('#assignSubject');
                 subject = $(form).find('select[name="subject"]');
                 clas = $(form).find('select[name="class"]');
-                user = $('#user').find('select[name="user"]');
-                console.log(user);
+                userss = $('#user');
 
                 subject.html(`<option selected disabled>Select Subject</option>`);
                 res.data.subjects.map(sub => {
                     subject.append(`<option value="${sub.id}">${sub.subject}</option>`)
                 })
 
+                class_id = `{{$class_id ?? 0}}`
+
                 clas.html(`<option selected disabled>Select Class</option>`);
                 res.data.classes.map(cla => {
-                    clas.append(`<option value="${cla.id}">${cla.class}</option>`)
+                    clas.append(`<option value="${cla.id}" ${(class_id == cla.id) ? 'selected' : ''}>${cla.class}</option>`)
                 })
 
-                user.html(`<option selected disabled>Select teacher</option>`);
+                userss.html(`<option selected disabled>Select teacher</option>`);
                 res.data.users.map(tea => {
-                    user.append(`<option value="${tea.id}">${tea.name}</option>`)
+                    userss.append(`<option value="${tea.id}">${tea.name}</option>`)
                 })
 
-                }).fail(function(res) {
-                    console.log(res);
-                })
-            }
+            }).fail(function(res) {
+            })
+        }
 
-            fetchRequirements();
+        fetchRequirements();
 
-            $('#assignSubject').on('submit', function(e) {
-                e.preventDefault();
-                form = $(this);
-                subject_id = $(form).find('select[name="subject"]').val();
-                class_id = $(form).find('select[name="class"]').val();
-                user_id = $(form).find('select[name="user"]').val();
-                if(!subject_id || !class_id || !user_id) { littleAlert('Pls fill out all fields', 1); return; }
+        $('#assignSubject').on('submit', function(e) {
+            e.preventDefault();
+            form = $(this);
+            subject_id = $(form).find('select[name="subject"]').val();
+            class_id = $(form).find('select[name="class"]').val();
+            user_id = $(form).find('select[name="user"]').val();
+            if(!subject_id || !class_id || !user_id) { littleAlert('Pls fill out all fields', 1); return; }
 
-                $.ajax({
-                    method: 'post',
-                    url: api_url+'assign_subject_to_teacher',
-                    data: {
-                        subject_id: subject_id,
-                        user_id: user_id,
-                        class_id: class_id
-                    },
-                    beforeSend:() => {
-                        btnProcess('.assignSubject', 'Assign Subject', 'before');
-                    }
-                }).done(function(res) {
-                    littleAlert(res.message);
-                    btnProcess('.assignSubject', 'Assign Subject', 'after');
-                    console.log(res);
-                }).fail(function(res) {
-                    parseError(res.responseJSON);
-                    btnProcess('.assignSubject', 'Assign Subject', 'after');
-                    console.log(res);
-                })
+            $.ajax({
+                method: 'post',
+                url: api_url+'assign_subject_to_teacher',
+                data: {
+                    subject_id: subject_id,
+                    user_id: user_id,
+                    class_id: class_id
+                },
+                beforeSend:() => {
+                    btnProcess('.assignSubject', 'Assign Subject', 'before');
+                }
+            }).done(function(res) {
+                littleAlert(res.message);
+                btnProcess('.assignSubject', 'Assign Subject', 'after');
+                $('#assignSubjectModal').modal('hide');
+                fetchTable();
+            }).fail(function(res) {
+                parseError(res.responseJSON);
+                btnProcess('.assignSubject', 'Assign Subject', 'after');
             })
         })
-    </script>
+
+
+        $('body').on('click', '.remove_subject', function(e) {
+            id = $(this).data('id');
+            if(!confirm('Subject will be removed from this user!')) { return; }
+            $.ajax({
+                method: 'post',
+                url: api_url+'remove_assigned_subject',
+                data:{
+                    set_subject_id: id
+                },
+                beforeSend:() => {
+                    $('.remove_subject').attr('disabled', 'disabled');
+                    $(this).html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>`);
+                }
+            }).done(function(res) {
+                littleAlert(res.message);
+                fetchTable();
+            }).fail(function(res) {
+                parseError(res.responseJSON);
+                $('.remove_subject').removeAttr('disabled');
+            })
+        })
+    })
+</script>
 
 @endsection

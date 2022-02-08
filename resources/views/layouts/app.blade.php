@@ -20,6 +20,20 @@
 
 
     <link rel="icon" href="{{ asset('assets/img/favicon.png') }}">
+
+    <style>
+        .profile_pics {
+            width: 50px;
+            height: 50px;
+        }
+
+        .object-cover {
+            object-fit: cover;
+        }
+
+    </style>
+
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -31,6 +45,8 @@
         @include('layouts.inc.control_nav')
 
         @include('layouts.inc.control_sidebar')
+
+        @include('layouts.inc.alert_top')
 
         <div class="content-wrapper">
             <div class="littleAlert"></div>
