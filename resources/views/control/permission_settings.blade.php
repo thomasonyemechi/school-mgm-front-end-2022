@@ -55,7 +55,7 @@ Permission Settings
                             </table>
                         </div>
 
-                        <div id="page_links">
+                        <div id="page_links" style="color: rgb(36, 35, 32)">
 
                         </div>
                     </div>

@@ -8,5 +8,3 @@ function access_token()
 function user(){
     return json_decode(json_encode(session()->get('info')['data']['user']));
 }
-
-?>

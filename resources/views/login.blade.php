@@ -118,8 +118,10 @@
                     })
                     location.href = '/control/dashboard';
                 }).fail( function (res) {
+                    console.log(res);
                     parseError(res.responseJSON);
                     btnProcess('#login', 'Sign In', 'after');
+
                 });
 
 
