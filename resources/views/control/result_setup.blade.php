@@ -25,6 +25,8 @@
     </div>
 
 
+
+
     <section class="content">
         <div class="row">
             <div class="col-md-4">
@@ -129,12 +131,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-info">Sign in</button>
                                 <button type="submit" class="btn btn-default float-right">Cancel</button>
                             </div>
-                            <!-- /.card-footer -->
                         </form> --}}
                     </div>
                 </div>
