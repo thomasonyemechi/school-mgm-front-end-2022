@@ -74,68 +74,53 @@
                         </h3>
                     </div>
                     <div class="card-body p-1   ">
-                        <div class="table-responsive">
-                            <table class="table table-striped mb-0">
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>Start Score</th>
-                                    <th>Remark</th>
-                                </tr>
-                                <tr>
-                                    <th>A</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <th>B</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <th>C</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <th>D</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <th>E</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <th>F</th>
-                                    <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
-                                    <td><input type="text" class="form-control form-control-sm"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <button class="btn btn-secondary float-right ">Submit</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        {{-- <form class="form-horizontal">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">A</label>
-                                    <div class="col-sm-4">
-                                        <input type="number" class="form-control" placeholder="A">
-                                    </div>
-                                    <label for="inputPassword3" class="col-sm-2 col-form-label">B</label>
-                                    <div class="col-sm-4">
-                                        <input type="number" class="form-control" placeholder="B">
-                                    </div>
-                                </div>
+
+                        <form action="" id="update_grade">
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0" id="u_grad_tb">
+                                    <tr>
+                                        <th>Grade</th>
+                                        <th>Start Score</th>
+                                        <th>Remark</th>
+                                    </tr>
+                                    <tr>
+                                        <th>A</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>B</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>C</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>D</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>E</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>F</th>
+                                        <td><input type="number" class="form-control form-control-sm" style="width: 60px"></td>
+                                        <td><input type="text" class="form-control form-control-sm"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button class="btn btn-secondary float-right update_grade">Submit</button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Sign in</button>
-                                <button type="submit" class="btn btn-default float-right">Cancel</button>
-                            </div>
-                        </form> --}}
+                        </form>
                     </div>
                 </div>
 
@@ -157,6 +142,46 @@
                     'Authorization': `Bearer {{ access_token() }}`
                 }
             });
+
+
+
+
+            $('#update_grade').on('submit', function(e) {
+                e.preventDefault();
+                form = $(this).find('tr'); data = [];
+
+                form.map(tr => {
+                    if(tr > 0 && tr < 7) {
+                        tr = form[tr].children;
+                        grade = tr[0].innerHTML;
+                        score = tr[1].children[0].value;
+                        remark = tr[2].children[0].value;
+                        arr = { grade: grade, score: score,  remark: remark  }
+                        data.push(arr);
+                    }
+                });
+
+                console.log(data);
+
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'update/subject_remark',
+                    data: {
+                        data: data
+                    },
+                    beforeSend:() => {
+                        btnProcess('.update_grade', '', 'before');
+                    }
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess('.update_grade', 'Submit', 'after');
+                }).fail(function(res) {
+                    parseError(res.responseJSON);
+                    btnProcess('.update_grade', 'Submit', 'after');
+                    console.log(res);
+                })
+            })
+
 
 
             $('#updateCa').on('submit', function(e) {
@@ -207,6 +232,25 @@
                     $(form).find('input[name="ca2"]').val(`${(ca) ? ca.ca2 : 0}`)
                     $(form).find('input[name="ca3"]').val(`${(ca) ? ca.ca3 : 0}`)
                     $(form).find('input[name="exam"]').val(`${(ca) ? ca.exam : 0}`)
+
+                    rem = JSON.parse(res.data.remarks);
+
+                    console.log(rem);
+
+
+
+                    form = $('#update_grade').find('tr');
+
+                    form.map((tr) => {
+                        ind = tr-1;
+                        if(tr > 0 && tr < 7) {
+                            tr = form[tr].children;
+                            tr[1].children[0].value = rem[ind].score;
+                            tr[2].children[0].value = rem[ind].remark
+                        }
+                    });
+
+
                 }).fail(function(res) {
                     console.log(res);
                 })
