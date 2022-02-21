@@ -160,9 +160,39 @@
     </div>
 
 
+    <div class="modal fade" id="updateRemark">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title text-bold">Update Remark (Thomas Onyemechi)</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="form-group">
+                            <label>Principal Remark</label>
+                            <input type="text" name="principal" class="form-control">
+                            <input type="hidden" name="id">
+                        </div>
+                        <div class="form-group">
+                            <label>Teacher Remark</label>
+                            <input type="text" name="teacher" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary float-right updateRemark">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-
-
+    <script src="{{ asset('assets/js/results.js') }}"></script>
 
     <script>
         $(function() {
@@ -882,6 +912,17 @@
             }
 
             fetchFeeCategory();
+
+
+            $.ajax({
+                method: 'get',
+                url: api_url+`result/{{$student_id}}`
+            }).done(function(res) {
+                console.log(res);
+                $('#result').append(ResultTemplate(res.data, ''))
+            })
+
+
 
         })
     </script>

@@ -123,6 +123,11 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
             Route::get('/result/check/{student_id?}', function ($student_id=0) {
                 return view('control.checkresult', compact('student_id'));
             });
+
+
+            Route::get('/view-result/{result_id}', function ($result_id) {
+                return view('control.result-view', compact('result_id'));
+            });
         });
 
 

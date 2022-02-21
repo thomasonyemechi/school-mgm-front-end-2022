@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_title')
-    Check Result
+    View Result
 @endsection
 
 
@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Check Result</h1>
+                    <h1 class="m-0">View Result</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/control/dashboard">Home</a></li>
-                        <li class="breadcrumb-item active">Check Result</li>
+                        <li class="breadcrumb-item active">View Result</li>
                     </ol>
                 </div>
             </div>
@@ -30,22 +30,6 @@
             <div class="row">
 
                 <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <form id="sub_form">
-                                    <div class="form-group">
-                                        <label>Select Student</label>
-                                        <select name="student_id" id="students" class="form-control select2bs4">
-                                            <option selected disabled>... Loading Students ...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn btn-secondary float-right">Check Result</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
                     <div id="res_body">
 
                     </div>
@@ -66,7 +50,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="">
+                    <form action="" enctype="mu">
                         <div class="form-group">
                             <label>Principal Remark</label>
                             <input type="text" name="principal" class="form-control">
@@ -90,7 +74,7 @@
 
 
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/results.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/results.js') }}"></script> --}}
 
     <script>
         $(function() {
@@ -101,44 +85,19 @@
                 }
             });
 
-
-            $('#sub_form').on('submit', function(e) {
-                e.preventDefault();
-                student = $('#students').val();
-                location.href = `/control/result/check/${student}`
-            })
-
-            function fetchStudent() {
-                $.ajax({
-                    method: 'get',
-                    url: api_url+'fetch_students'
-                }).done(function (res) {
-                    console.log(res);
-                    li = $('#students')
-                    li.html(`<option selected disabled>...Select Student...</option>`);
-                    res.data.forEach(std => {
-                        li.append(`<option value="${std.id}">${std.surname} ${std.firstname} ${std.othername} | ${(std.class) ? std.class.class : ''} <sup>${(std.arm) ? std.arm.arm : ''}, ${std.sex}</sup></option>`)
-                    });
-                }).fail(function(res) {
-                    console.log(res);
-                })
-            }
-
-            fetchStudent();
-
             function checkResult()
             {
-                student_id = `{{$student_id}}`
-                if(student_id == 0){ littleAlert('Pls select a student to check result', 1); return; }
+                result_id = `{{$result_id}}`
+
                 $.ajax({
                     method: 'get',
-                    url: api_url+`result/${student_id}`
+                    url: api_url+`viewer/${result_id}`
                 }).done(function(res) {
                     console.log(res);
-                    $('#res_body').html(ResultTemplate(res.data, ''))
+                    // $('#res_body').html(ResultTemplate(res.data, ''))
                 }).fail(function(res) {
                     console.log(res);
-                    parseError(res.responseJSON);
+                    // parseError(res.responseJSON);
                 })
             }
 

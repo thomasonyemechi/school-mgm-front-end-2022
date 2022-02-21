@@ -2,6 +2,9 @@ function ResultTemplate(result, set) {
     school = result.school;
     console.log(result);
 
+    title = result.surname + ' ' + result.firstname + ' ' + result.othername;
+    data = { id: result.others.result_id, name: title, p_rem: result.others.principal_remark, t_rem: result.others.teacher_remark }
+
     subject_string = ''
     total = 0;
 
@@ -37,7 +40,6 @@ function ResultTemplate(result, set) {
                                         <img width="100" class="img-circle" src="${api_url_root+school.logo}">
                                     </td>
                                     <td width="50%">
-
                                         <div class="text-center">
                                             <h1 style="font-size: 25px; font-weight:bold;" class="mb-0">
                                                 ${school.name}</h1>
@@ -58,7 +60,7 @@ function ResultTemplate(result, set) {
             <table class="table table-bordered mb-1">
                 <thead>
                     <tr>
-                        <td colspan="4"><b>Name:</b> ${result.surname} ${result.firstname} ${result.othername}</td>
+                        <td colspan="4"><b>Name:</b> ${title}</td>
                         <td colspan="4"><b>Class:</b> ${result.others.class}</td>
                         <td colspan="4"><b>Gender:</b> ${result.sex}</td>
                     </tr>
@@ -116,28 +118,74 @@ function ResultTemplate(result, set) {
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-6">
-                                            <b>Teacher's Comment:</b>
-                                            <span style="font-weight: lighter">
-                                            Good
+                                            <b>Teacher's Comment:</b><br>
+                                            <span style="font-weight: lighter" class="t_rem">
+                                            ${result.others.teacher_remark}
                                             </span>
                                         </div>
                                         <div class="col-6">
-                                            <b>Principal's Comment: </b>
-                                            <span style="font-weight: lighter">
-                                            V. Good
+                                            <b>Principal's Comment: </b><br>
+                                            <span style="font-weight: lighter" class="p_rem">
+                                                ${result.others.principal_remark}
                                             </span>
                                         </div>
+
                                     </div>
                                 </div>
-
-
-
+                            </div>
                         </th>
                     </tr>
                 </tfoot>
             </table>
+            <div class="row">
+                <div class="col-12 hide@print mt-3" >
+                    <button class="btn btn-info float-right" onclick="print()">Print</button>
+                    <button class="btn btn-secondary float-right mr-2 up_rem" data-data='${JSON.stringify(data)}'>Update Remarks</button>
+                </div>
+            </div>
         </div>
     </div>
 </p>
    `
 }
+
+
+$('body').on('click', '.up_rem', function() {
+    data = $(this).data('data');
+    modal = $('#updateRemark');
+    modal.modal('show');
+    $(modal).find('input[name="teacher"]').val(`${data.t_rem}`);
+    $(modal).find('input[name="principal"]').val(`${data.p_rem}`);
+    $(modal).find('input[name="id"]').val(`${data.id}`);
+    $(modal).find('.modal-title').html(`Update Remark ${data.name}`);
+})
+
+
+$('body').on('click', '.updateRemark', function(e) {
+    e.preventDefault();
+    modal = $('#updateRemark');
+    p = $(modal).find('input[name="principal"]').val();
+    t = $(modal).find('input[name="teacher"]').val();
+    id = $(modal).find('input[name="id"]').val();
+
+    $.ajax({
+        method: 'post',
+        url: api_url+'result/update_remark',
+        data: {
+            result_id: id,
+            principal_remark: p,
+            teacher_remark: t
+        },
+        beforeSend:() => {
+            btnProcess('.updateRemark', '', 'before');
+        }
+    }).done(function(res) {
+        littleAlert(res.message);
+        btnProcess('.updateRemark', 'Update', 'after');
+        $('.t_rem').html(t); $('.p_rem').html(p);
+    }).fail(function(res) {
+        parseError(res.responseJSON);
+        console.log(res);
+        btnProcess('.updateRemark', 'Update', 'after');
+    })
+})
