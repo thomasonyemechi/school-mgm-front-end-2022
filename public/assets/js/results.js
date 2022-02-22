@@ -1,16 +1,26 @@
 function ResultTemplate(result, set) {
     school = result.school;
-    console.log(result);
 
     title = result.surname + ' ' + result.firstname + ' ' + result.othername;
     data = { id: result.others.result_id, name: title, p_rem: result.others.principal_remark, t_rem: result.others.teacher_remark }
 
     subject_string = ''
-    total = 0;
+    total_score = 0;
+
+    check_prev_term = 0;
 
     result.results.forEach(res => {
-                total += res.total;
-                subject_string += `
+
+        total_score += res.total;
+        if (check_prev_term == 0) {
+            check_prev_term = (res.prev == 0) ? 0 : 1;
+        }
+        last_term = cauclatePrev(res.prev);
+        ttr = (res.prev == 0) ? `` : `
+            <td class="center">${num(last_term)}</td>
+            <td class="center">${num(res.total)}</td>
+        `;
+        subject_string += `
         <tr>
             <td class="center">${res.subject}</td>
             <td class="center">${res.t1}</td>
@@ -18,18 +28,40 @@ function ResultTemplate(result, set) {
             <td class="center">${res.t3}</td>
             <td class="center">${res.exam}</td>
             <td class="center">${res.term_total}</td>
-            ${(res.prev == 0) ? `<td>Awnnn</td>` : '' }
-            <td class="center">${res.cla_avr}</td>
+                ${ttr}
+            <td class="center">${num(res.cla_avr)}</td>
             <td class="center">${res.grade}</td>
             <td class="center">${res.remark}</td>
         </tr>
         `
     });
 
+
+    chg = (check_prev_term == 0) ? `<th>Total</th>` : `
+        <th>Term Total</th>
+        <th>Last Term</th>
+        <th>Total</th>
+    `;
+
+    head = `
+        <tr>
+            <th>Subjects</th>
+            <th>CA1</th>
+            <th>CA2</th>
+            <th>CA3</th>
+            <th>Exam</th>
+            ${chg}
+            <th>Class Av</th>
+            <th>Grade</th>
+            <th>Remark</th>
+        </tr>
+    `
+
+
     return `
-    <p style="page-break-before: always">
+    <p class="p-0 m-0" style="page-break-before: always">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body p-1">
             <div style="border: solid thin #CCC" class="mb-1 p-2">
                 <table class="" width="100%">
                     <tr>
@@ -69,17 +101,7 @@ function ResultTemplate(result, set) {
 
             <table class="table table-bordered mb-1">
                 <thead>
-                    <tr>
-                        <th>Subjects</th>
-                        <th>CA1</th>
-                        <th>CA2</th>
-                        <th>CA3</th>
-                        <th>Exam</th>
-                        <th>Total</th>
-                        <th>Class Av</th>
-                        <th>Grade</th>
-                        <th>Remark</th>
-                    </tr>
+                    ${head}
                 </thead>
                 <tbody>
                     ${subject_string}
@@ -91,8 +113,8 @@ function ResultTemplate(result, set) {
                 <tfoot>
                     <tr>
                         <th colspan="2">Subjects: ${result.results.length}</th>
-                        <th colspan="2">Total Score: ${total}</th>
-                        <th colspan="2">Average: ${total/result.results.length}</th>
+                        <th colspan="2">Total Score: ${num(total_score)}</th>
+                        <th colspan="2">Average: ${num(total_score/result.results.length)}</th>
                         <th colspan="2">Class Average: </th>
                         <th colspan="2">No in class: 20</th>
                     </tr>
@@ -150,6 +172,30 @@ function ResultTemplate(result, set) {
 }
 
 
+const num = (num) => {
+    return num.toFixed(0)
+}
+
+
+
+function cauclatePrev(prev) {
+    total = 0;
+    c = 0;
+    if (prev == 0) { return 0; }
+    prev.forEach(sc => {
+        if (sc.total > 0) {
+            c++;
+        }
+        total += sc.total
+    });
+    if (total == 0) {
+        return 0;
+    }
+    val = total / c
+    return val;
+}
+
+
 $('body').on('click', '.up_rem', function() {
     data = $(this).data('data');
     modal = $('#updateRemark');
@@ -170,22 +216,22 @@ $('body').on('click', '.updateRemark', function(e) {
 
     $.ajax({
         method: 'post',
-        url: api_url+'result/update_remark',
+        url: api_url + 'result/update_remark',
         data: {
             result_id: id,
             principal_remark: p,
             teacher_remark: t
         },
-        beforeSend:() => {
+        beforeSend: () => {
             btnProcess('.updateRemark', '', 'before');
         }
     }).done(function(res) {
         littleAlert(res.message);
         btnProcess('.updateRemark', 'Update', 'after');
-        $('.t_rem').html(t); $('.p_rem').html(p);
+        $('.t_rem').html(t);
+        $('.p_rem').html(p);
     }).fail(function(res) {
         parseError(res.responseJSON);
-        console.log(res);
         btnProcess('.updateRemark', 'Update', 'after');
     })
 })

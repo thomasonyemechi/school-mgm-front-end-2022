@@ -27,13 +27,8 @@
 
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
+            <div id="res_body">
 
-                <div class="col-12">
-                    <div id="res_body">
-
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -44,7 +39,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <p class="modal-title text-bold">Update Remark (Thomas Onyemechi)</p>
+                    <p class="modal-title text-bold">Update Remark</p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -74,7 +69,7 @@
 
 
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/results.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/results.js') }}"></script>
 
     <script>
         $(function() {
@@ -91,13 +86,13 @@
 
                 $.ajax({
                     method: 'get',
-                    url: api_url+`viewer/${result_id}`
+                    url: api_url+`viewer/result/${result_id}`
                 }).done(function(res) {
                     console.log(res);
-                    // $('#res_body').html(ResultTemplate(res.data, ''))
+                    $('#res_body').html(ResultTemplate(res.data, ''))
                 }).fail(function(res) {
                     console.log(res);
-                    // parseError(res.responseJSON);
+                    parseError(res.responseJSON);
                 })
             }
 
