@@ -230,6 +230,7 @@ $('body').on('click', '.updateRemark', function(e) {
         btnProcess('.updateRemark', 'Update', 'after');
         $('.t_rem').html(t);
         $('.p_rem').html(p);
+        modal.modal('hide');
     }).fail(function(res) {
         parseError(res.responseJSON);
         btnProcess('.updateRemark', 'Update', 'after');

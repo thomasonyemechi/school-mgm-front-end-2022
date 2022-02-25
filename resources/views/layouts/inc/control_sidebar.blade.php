@@ -153,6 +153,36 @@
                         </ul>
                     </li>
 
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-subscript"></i>
+                            <p>
+                                Results Mgm
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/control/result/check/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Students Results</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="/control/result/class/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Class Result </p>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+
+
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-toolbox"> </i>
