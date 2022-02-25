@@ -155,9 +155,6 @@
             }
 
             checkResult();
-
-
-
         });
     </script>
 
