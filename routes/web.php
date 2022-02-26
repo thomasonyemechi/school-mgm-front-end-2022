@@ -130,6 +130,20 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
             });
 
 
+            Route::get('/result/print/{class_id?}', function ($class_id=0) {
+                return view('control.print_class_result', compact('class_id'));
+            });
+
+
+
+            Route::get('/result/print/s/{result_id?}', function ($result_id=0) {
+                return view('control.print_student_result', compact('result_id'));
+            });
+
+
+
+
+
             Route::get('/view-result/{result_id}', function ($result_id) {
                 return view('control.result-view', compact('result_id'));
             });

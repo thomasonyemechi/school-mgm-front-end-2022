@@ -160,8 +160,8 @@ function ResultTemplate(result, set) {
                 </tfoot>
             </table>
             <div class="row">
-                <div class="col-12 hide@print mt-3" >
-                    <button class="btn btn-info float-right" onclick="print()">Print</button>
+                <div class="col-12 hide-print mt-3" >
+                    <a href="/control/result/print/s/${result.others.result_id}" target="_blank" class="btn btn-info float-right">Print</a>
                     <button class="btn btn-secondary float-right mr-2 up_rem" data-data='${JSON.stringify(data)}'>Update Remarks</button>
                 </div>
             </div>

@@ -146,7 +146,7 @@
                     });
 
                     res_body.append(`
-                        <button class="mb-3 btn-lg float-right btn btn-secondary"><i class="fa fa-print" aria-hidden="true"></i> Print All Reuslt</button>
+                        <a href="/control/result/print/{{$class_id}}" target="_blank" class="mb-3 btn-lg float-right btn btn-secondary"><i class="fa fa-print" aria-hidden="true"></i> Print All Reuslt</a>
                     `);
                 }).fail(function(res) {
                     console.log(res);
