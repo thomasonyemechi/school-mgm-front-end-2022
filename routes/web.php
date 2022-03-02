@@ -195,6 +195,14 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
     })->middleware('other');
 
 
+    Route::get('/setting/sub/{term_id}', function ($term_id=0) {
+        return view('control.subscription', compact('term_id'));
+    })->middleware('other');
+
+
+
+
+
     Route::get('/tem/1', function () {
         return view('control.result_template_1');
     });

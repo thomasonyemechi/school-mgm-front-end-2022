@@ -80,7 +80,7 @@
 
 
     <div class="modal fade" id="editTermModal">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <p  class="modal-title text-bold">Edit Term (2021/2022 Session, First Term)</p>
@@ -142,15 +142,16 @@
 
                         body_txt = '';
                         terms.forEach(term => {
-                            btn = (term.status == 1) ?`Active`:`<button class="btn btn-xs btn-secondary activateTerm" data-id="${term.id}" title="Click to activate term">
-                                <i class="fa fa-check" aria-hidden="true"></i> </button>` ;
+                            btn = (term.status == 1) ?`Active`:`<button class="btn btn-xs btn-success activateTerm" data-id="${term.id}" title="Click to activate term">
+                                <i class="fa fa-check" aria-hidden="true"></i> Activate </button>`;
+                            btn = (term.paid == 1) ? btn : `<a href="/control/setting/sub/${term.id}" class="btn btn-xs btn-danger" > Pay to Act </a>` ;
                             body_txt += `
                                 <tr ${ (term.status == 1) ? `class="bg-success"` : '' }>
                                     <td> ${term_text(term.term)} </td>
                                     <td> ${ term.close }</td>
                                     <td> ${ term.resume }</td>
                                     <th>
-                                        <button class="btn btn-xs btn-primary editTermInfo" data-data='${ JSON.stringify(term) }'><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-xs btn-primary editTermInfo" data-data='${ JSON.stringify(term) }'><i class="fas fa-edit"></i> Edit</button>
                                         ${btn}
                                     </th>
                                 </tr>
@@ -215,7 +216,7 @@
                     littleAlert(res.message);
                     fetchSession();
                 }).fail(function (res) {
-                    $(this).html(`<i class="fa fa-check" aria-hidden="true"></i>`)
+                    $('.activateTerm').html(`<i class="fa fa-check" aria-hidden="true"></i>`)
                     $('.activateTerm').removeAttr('disabled');
                     parseError(res.responseJSON);
                 })
