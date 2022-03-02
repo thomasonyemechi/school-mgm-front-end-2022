@@ -212,7 +212,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="/control/setting/sub" class="nav-link">
+                                <a href="{{(term()) ? '/control/setting/sub/'.term()->id : '#' }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Subscription Mgm</p>
                                 </a>

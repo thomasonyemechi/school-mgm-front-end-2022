@@ -36,6 +36,9 @@ Subscriptions
                     </div>
                     <div class="card-body">
                         <form action="" id="linkWallet" class="row" >
+                            <div class="col-md-12 form-group">
+                                <b>Note:</b> You have to link your livpetal wallet before you can perform transactions
+                            </div>
                             <div class="col-md-6 form-group">
                                 <input type="text" name="liveid" class="form-control" placeholder="Live Petal ID">
                             </div>
@@ -88,9 +91,9 @@ Subscriptions
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <span><b>Total</b>: 0</span>
-                            <span><b>Used</b>: 0</span>
-                            <span><b>Availabe</b>: 0</span>
+                            <span><b>Total</b>: <span class="total_slot">0</span></span>
+                            <span><b>Used</b>: <span class="used_slot">0</span></span>
+                            <span><b>Availabe</b>: <span class="slots_av">0</span></span>
                         </div>
                         <br>
 
@@ -104,8 +107,8 @@ Subscriptions
                                 </select>
                             </div>
                             <div class="form-group col-12 mb-0 ">
+                                <span><b>Wallet Balance: <span class="walletbalance">0</span></b></span>
                                 <button type="submit"  class="btn btn-secondary  float-right" disabled>Continue Process</button>
-
                                 <button type="submit"  class="btn btn-secondary slotPurchase float-right" style="margin-right: 10px">Pay With Livepetal</button>
                             </div>
                         </form>
@@ -123,12 +126,13 @@ Subscriptions
                         <table id="example1" class="table mb-0 table-bordered table-hover table-striped">
                             <thead>
                                 <tr>
-                                    <th colspan="2">Slots</th>
+                                    <th>Slots</th>
                                     <th>Amount</th>
                                     <th>Date</th>
+                                    <th>By</th>
                                 </tr>
                             </thead>
-                            <tbody id="">
+                            <tbody id="slots_history">
 
 
                             </tbody>
@@ -176,14 +180,31 @@ Subscriptions
                     littleAlert(res.message);
                     btnProcess('.linkWallet', 'Link Wallet', 'after')
                     fetchLinkedWallets();
-                    console.log(res);
                     form[0].reset();
+                    walletBalance();
                 }).fail(function(res) {
                     parseError(res.responseJSON);
                     btnProcess('.linkWallet', 'Link Wallet', 'after')
-                    console.log(res.responseJSON);
                 })
             })
+
+
+            function slotBalance()
+            {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'available_slots'
+                }).done(function(res) {
+                    $('.total_slot').html(res.total)
+                    $('.used_slot').html(res.used)
+                    $('.slots_av').html(res.available)
+                }).fail(function(res) {
+                })
+            }
+
+            slotBalance();
+
+
 
 
 
@@ -193,8 +214,6 @@ Subscriptions
                     method: 'get',
                     url: api_url+'linked_wallet'
                 }).done(function(res) {
-                   console.log(res);
-
                    body = $('#wallets_linked');
                    body.html('')
                    res.data.map(wal => {
@@ -208,12 +227,51 @@ Subscriptions
                        `)
                    })
                 }).fail(function(res) {
-                    console.log(res);
                 })
             }
 
 
             fetchLinkedWallets();
+
+
+            function slotsPurchaseHistory()
+            {
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'slot/history'
+                }).done(function(res) {
+                    console.log(res);
+                    body = $('#slots_history')
+                    body.html(``);
+                    res.data.map(slt => {
+                        body.append(`
+                            <tr>
+                                <td>${slt.slots}</td>
+                                <td>${moneyFormat(slt.amount)}</td>
+                                <td>${formatDate(slt.created_at)}</td>
+                                <td>${slt.user.name}</td>
+                            </tr>
+                        `)
+                    })
+                }).fail(function(res) {
+                    console.log(res);
+                })
+            }
+
+            slotsPurchaseHistory();
+
+            function walletBalance()
+            {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'wallet_balance'
+                }).done(function(res) {
+                    $('.walletbalance').html(moneyFormat(res.balance))
+                }).fail(function(res) {
+                })
+            }
+
+            walletBalance();
 
 
             $('#slotPurchase').on('submit', function(e) {
@@ -223,7 +281,6 @@ Subscriptions
                 pack = $(form).find('select[name="pack"]').val();
                 term_id = `{{$term_id}}`
                 if(!slots || slots <= 0) { littleAlert('The slots field is required', 1); return; }
-                console.log(slots, pack, term_id);
                 $.ajax({
                     method: 'post',
                     url: api_url+'purchase_slot',
@@ -236,13 +293,15 @@ Subscriptions
                         btnProcess('.slotPurchase', '', 'before')
                     }
                 }).done(function(res){
-                    console.log(res);
                     littleAlert(res.message);
                     btnProcess('.slotPurchase', 'Pay With Livepetal', 'after')
+                    slotsPurchaseHistory();
+                    slotBalance();
+                    walletBalance();
                 }).fail(function(res) {
                     parseError(res.responseJSON);
-                    console.log(res);
                     btnProcess('.slotPurchase', 'Pay With Livepetal', 'after')
+                    console.log(res);
                 })
             })
 

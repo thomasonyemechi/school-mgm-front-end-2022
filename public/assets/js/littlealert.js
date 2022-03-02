@@ -5,8 +5,8 @@ function littleAlert(msg, t = 0) {
     color = (t == 1) ? 'danger' : 'success';
     icon = (t == 1) ? 'ban' : 'checked';
     ret = `
-        <div class="alert bg-${color}" style="position:fixed; top:55px; right:15px; z-index:999999999999999999">
-        <i class="icon fe fe-${color}  text-white"> ${msg}  </i>
+        <div class="alert bg-${color}" style="position:fixed; top:55px; right:15px; z-index:1">
+            <i class="icon fe fe-${color}  text-white"> ${msg}  </i>
         </div>
     `
     alat = $('.littleAlert');
