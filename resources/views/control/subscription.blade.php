@@ -29,7 +29,7 @@ Subscriptions
             <div class="col-lg-6 col-12">
                 <div class="card card-secondary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">
+                        <h3 class="card-title n">
                             <i class="fas fa-plus-square"></i>
                             Link Livepetal Wallet
                         </h3>
