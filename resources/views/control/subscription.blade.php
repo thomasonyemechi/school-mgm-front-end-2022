@@ -36,7 +36,7 @@ Subscriptions
                     </div>
                     <div class="card-body">
                         <form action="" id="linkWallet" class="row" >
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-12 form-group text-warning">
                                 <b>Note:</b> You have to link your livpetal wallet before you can perform transactions
                             </div>
                             <div class="col-md-6 form-group">
@@ -46,6 +46,7 @@ Subscriptions
                                 <input type="" autocomplete="off" autofill="close" name="pwd" class="form-control" placeholder="Live Petal Password">
                             </div>
                             <div class="form-group col-12 mb-0 ">
+                                <span><b>Current Wallet: <span class="currentwallet"></span></b></span>
                                 <button type="submit"  class="btn btn-secondary float-right linkWallet">Link Wallet</button>
                             </div>
                         </form>
@@ -108,7 +109,6 @@ Subscriptions
                             </div>
                             <div class="form-group col-12 mb-0 ">
                                 <span><b>Wallet Balance: <span class="walletbalance">0</span></b></span>
-                                <button type="submit"  class="btn btn-secondary  float-right" disabled>Continue Process</button>
                                 <button type="submit"  class="btn btn-secondary slotPurchase float-right" style="margin-right: 10px">Pay With Livepetal</button>
                             </div>
                         </form>
@@ -153,7 +153,7 @@ Subscriptions
 
             $.ajaxSetup({
                 headers: {
-                    'Authorization': `Bearer {{access_token()}}`
+                    'Authorization': `Bearer {{access_token()}}`,
                 }
             });
 
@@ -266,7 +266,9 @@ Subscriptions
                     method: 'get',
                     url: api_url+'wallet_balance'
                 }).done(function(res) {
+
                     $('.walletbalance').html(moneyFormat(res.balance))
+                    $('.currentwallet').html(`${res.id} (${res.name})`)
                 }).fail(function(res) {
                 })
             }
@@ -298,6 +300,25 @@ Subscriptions
                     slotsPurchaseHistory();
                     slotBalance();
                     walletBalance();
+
+                    form[0].reset();
+
+                    if(res.type == 3) {
+                        console.log(res.term);
+                        $.ajax({
+                            method: 'post',
+                            url: '/reput_term',
+                            data: { '_token' : `{{ csrf_token() }}`,  term: JSON.stringify(res.term) },
+                        }).done(function(res) {
+                            console.log(res);
+                            littleAlert('Current term Updated sucessfully');
+                            setTimeout(() => {
+                                location.href= "/control/dashboard"
+                            }, 3000);
+                        }).fail(function(res) {
+                            console.log(res);
+                        })
+                    }
                 }).fail(function(res) {
                     parseError(res.responseJSON);
                     btnProcess('.slotPurchase', 'Pay With Livepetal', 'after')

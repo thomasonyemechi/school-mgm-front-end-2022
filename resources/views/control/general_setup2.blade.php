@@ -22,6 +22,9 @@
         </div>
     </div>
 
+    @php
+        // print_r()
+    @endphp
 
     <section class="content">
         <div class="row">
@@ -140,11 +143,14 @@
                     res.data.map(sess => {
                         terms = sess.terms
 
+                        c_term = `{{term()->id ?? ''}}`
+                        link = (!c_term) ? `/control/setting/sub/` : `/control/setting/renew/`;
+
                         body_txt = '';
                         terms.forEach(term => {
                             btn = (term.status == 1) ?`Active`:`<button class="btn btn-xs btn-success activateTerm" data-id="${term.id}" title="Click to activate term">
                                 <i class="fa fa-check" aria-hidden="true"></i> Activate </button>`;
-                            btn = (term.paid == 1) ? btn : `<a href="/control/setting/sub/${term.id}" class="btn btn-xs btn-danger" > Pay to Act </a>` ;
+                            btn = (term.paid == 1) ? btn : `<a href="${link}${term.id}" class="btn btn-xs btn-danger" > Pay to Act </a>` ;
                             body_txt += `
                                 <tr ${ (term.status == 1) ? `class="bg-success"` : '' }>
                                     <td> ${term_text(term.term)} </td>
@@ -215,12 +221,22 @@
                 }).done(function (res) {
                     littleAlert(res.message);
                     fetchSession();
+
+                    $.ajax({
+                        method: 'post',
+                        url: '/reput_term',
+                        data: { '_token' : `{{ csrf_token() }}`,  term: JSON.stringify(res.term) },
+                    }).done(function(res) {
+                        littleAlert('Current term Updated sucessfully');
+                    }).fail(function(res) {
+                    })
+
+
                 }).fail(function (res) {
                     $('.activateTerm').html(`<i class="fa fa-check" aria-hidden="true"></i>`)
                     $('.activateTerm').removeAttr('disabled');
                     parseError(res.responseJSON);
                 })
-                console.log(term_id);
             })
 
 

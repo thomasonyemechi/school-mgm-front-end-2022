@@ -201,6 +201,12 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
 
 
 
+    Route::get('/setting/renew/{term_id}', function ($term_id=0) {
+        return view('control.renwesub', compact('term_id'));
+    })->middleware('other');
+
+
+
 
 
     Route::get('/tem/1', function () {
@@ -220,7 +226,10 @@ Route::get('/give_current_session', function () {
 });
 
 
-Route::post('/session_login_infomation',[MiscellaneousController::class, 'sessionLoginInfomation'])->name('session_login_infomation');
+Route::post('/session_login_infomation',[MiscellaneousController::class, 'sessionLoginInfomation']);
+Route::post('/reput_term', [MiscellaneousController::class, 'reputTerm']);
+
+
 
 
 Route::get('/login', function () {
