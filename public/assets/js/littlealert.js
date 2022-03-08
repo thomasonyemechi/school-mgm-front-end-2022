@@ -110,7 +110,7 @@ function dropPaginatedPages(links) {
 
 const moneyFormat = (num) => {
     var numb = new Intl.NumberFormat();
-    return '$ ' + numb.format(num);
+    return '₦ ' + numb.format(num);
 }
 
 
