@@ -18,5 +18,5 @@ function term()
 
 function moneyFormat($num)
 {
-    return '$ '.number_format($num);
+    return '₦ '.number_format($num);
 }
