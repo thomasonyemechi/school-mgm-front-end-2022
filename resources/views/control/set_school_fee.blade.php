@@ -205,13 +205,14 @@
             {
                 $.ajax({
                     method: 'get',
-                    url: 'http://127.0.0.1:8000/api/control/fee_requirements'
+                    url: api_url+'fee_requirements'
                 }).done(function (res) {
                     form = $('#setSchoolFees');
                     clas = $(form).find('select[name="class"]')
                     clas.html(`<option disabled selected>Select a Class</option>`)
                     $('#cla').html(`<option disabled selected>Class</option>`)
                     res.data.classes.map(cla => {
+                        console.log(cla);
                         clas.append(`<option value="${cla.id}" >${cla.class}</option>`)
                         $('#cla').append(`<option value="${cla.id}" ${ (c_class == cla.id) ? 'selected' : ''} >${cla.class}</option>`)
                     })
@@ -248,9 +249,10 @@
 
                 if(!amount || !cla || !fee_category) { littleAlert('All fields are required', 1); return }
 
+
                 $.ajax({
                     method: 'post',
-                    url: 'http://127.0.0.1:8000/api/control/set_fee',
+                    url: api_url+'set_fee',
                     data: {
                         fee_cat_id: fee_category,
                         class_id: cla,
@@ -267,6 +269,7 @@
                 }).fail(function (res) {
                     parseError(res.responseJSON);
                     btnProcess('.setSchoolFees', 'Set Fee', 'after');
+                    console.log(res);
                 })
 
             })

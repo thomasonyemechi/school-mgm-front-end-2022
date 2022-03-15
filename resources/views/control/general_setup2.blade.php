@@ -78,6 +78,29 @@
                 </div>
 
             </div>
+
+            <div class="col-lg-6 col-12">
+                <div class="card card-secondary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-edit"></i>
+                            Edit School Info
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="">
+                            <div class="form-group">
+                                <label for="">Session</label>
+                                <select id="" class="form-control select2bs4">
+                                </select>
+                            </div>
+                            <div class="form-group mb-0 float-right">
+                                <button type="submit"  class="btn btn-secondary">Update School Info</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
