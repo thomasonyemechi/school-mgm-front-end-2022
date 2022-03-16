@@ -141,7 +141,9 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
             });
 
 
-
+            Route::get('/managepromotion/{class_id?}', function ($class_id=0) {
+                return view('control.manage_promotions', compact('class_id'));
+            });
 
 
             Route::get('/view-result/{result_id}', function ($result_id) {

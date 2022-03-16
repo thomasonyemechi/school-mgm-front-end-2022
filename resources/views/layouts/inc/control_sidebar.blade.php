@@ -221,6 +221,16 @@
                         </ul>
                     </li>
 
+
+
+                    <li class="nav-item">
+                        <a href="/control/managepromotion" class="nav-link">
+                            <i class="fas fa-scroll    "></i>
+                            <p>Manage Promotions</p>
+                        </a>
+                    </li>
+
+
                 @endif
 
 
@@ -318,6 +328,8 @@
 
                         </ul>
                     </li>
+
+
                 @endif
 
 

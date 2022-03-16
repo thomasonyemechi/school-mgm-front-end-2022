@@ -88,16 +88,55 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <form action="">
-                            <div class="form-group">
-                                <label for="">Session</label>
-                                <select id="" class="form-control select2bs4">
-                                </select>
+                        <form action="" class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="">School Name</label>
+                                <input type="text" class="form-control" value="{{user()->school->name}}">
                             </div>
-                            <div class="form-group mb-0 float-right">
-                                <button type="submit"  class="btn btn-secondary">Update School Info</button>
+                            <div class="col-md-6 form-group">
+                                <label for="">E-mail</label>
+                                <input type="text" class="form-control" disabled value="{{user()->school->email}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="">Website</label>
+                                <input type="url" class="form-control" placeholder="School website" value="{{user()->school->website}}">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="">Phone Number</label>
+                                <input type="url" class="form-control" placeholder="Phone Number" value="{{user()->school->phone}}">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label for="">Alternative Phone Number</label>
+                                <input type="url" class="form-control" placeholder="Phone Number" value="{{user()->school->alternate_phone}}">
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <label for="">Motto</label>
+                                <input type="text" class="form-control" value="{{user()->school->motto}}">
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <label for="">Address</label>
+                                <textarea name="" id="" class="form-control" cols="3">{{user()->school->address}}</textarea>
+                            </div>
+
+
+                            <div class="form-group col-md-12 mb-0 ">
+                                <button type="submit"  class="btn btn-secondary float-right">Update School Info</button>
                             </div>
                         </form>
+
+                        <hr>
+                        <b>Update School Logo</b>
+                        <div>
+                            <div class="mt-2 d-flex justify-content-center">
+                                <img src="{{env('API_ROOT_URL').user()->school->logo}}" alt="SchoolPetal Logo" class="brand-image img-circle elevation-3" style="opacity: .5">
+
+                            </div>
+                            <button class="btn btn-secondary btn-block mt-5">Upload New Photo</button>
+                        </div>
                     </div>
                 </div>
             </div>
