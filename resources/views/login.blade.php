@@ -115,8 +115,9 @@
                         method: 'post',
                         url: '/session_login_infomation',
                         data: { data: res }
-                    })
-                    location.href = '/control/dashboard';
+                    }).done(function(res) {
+                        location.href = '/control/dashboard';
+                    });
                 }).fail( function (res) {
                     console.log(res);
                     parseError(res.responseJSON);
