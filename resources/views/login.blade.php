@@ -109,13 +109,13 @@
                         btnProcess('#login', 'Sign In', 'before');
                     }
                 }).done(function (res) {
-                    console.log(res);
-                    littleAlert(res.message)
+                    message = res.message;
                     $.ajax({
                         method: 'post',
                         url: '/session_login_infomation',
                         data: { data: res }
                     }).done(function(res) {
+                        littleAlert(message)
                         location.href = '/control/dashboard';
                     });
                 }).fail( function (res) {
