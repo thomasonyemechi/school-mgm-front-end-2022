@@ -17,7 +17,5 @@
     </script>
     <div id="refresh" class="alert bg-danger" style="position:fixed; top:55px; right:15px; z-index:999999999999999999">
         <i class="icon text-white">  {!! session::get('error') !!}  </i>
-
-        </div>
-
+    </div>
 @endif
