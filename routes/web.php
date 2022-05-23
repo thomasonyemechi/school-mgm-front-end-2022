@@ -149,6 +149,12 @@ Route::group(['prefix'=>'control', 'as'=>'control.', 'middleware' => ['auth2'] ]
             Route::get('/view-result/{result_id}', function ($result_id) {
                 return view('control.result-view', compact('result_id'));
             });
+
+            Route::get('/create/time_table', function () {
+                return view('control.create_time_table');
+            });
+
+
         });
 
 
