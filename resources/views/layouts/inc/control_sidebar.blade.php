@@ -234,7 +234,7 @@
                     <li class="nav-item">
                         <a href="/control/create/time_table" class="nav-link">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
-                            <p>Time Table Management</p>
+                            <p>Time Table Setup</p>
                         </a>
                     </li>
 
