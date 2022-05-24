@@ -129,7 +129,7 @@
                                                 <div class="subject_setup row">
 
                                                 </div>
-                                                <button class="btn btn-secondary mt-3 float-right" >Create Time Table</button>
+                                                <button class="btn btn-secondary mt-3 float-right class_setup_btn" >Create Time Table</button>
                                             </div>
                                         </form>
                                     </div>
@@ -205,6 +205,29 @@
                 displaySetupPeriods(this.value)
             })
 
+
+            $('#class_setup').on('submit', function(e) {
+                e.preventDefault()
+                title = $(this).find('input[class="form-control"]').val();
+                cla = $(this).find('select[name="class"]').val();
+                all_per = $('.period_per_week'); periods = [];
+                all_per.map(per => {
+                    per = all_per[per];
+                    value = parseInt(per.value)
+                    if(value > 0) {
+                        pa = $(per).parent()
+                        subject_id = $(pa).find('input').val();
+                        console.log(subject_id);
+                        arr = { subject_id:subject_id, periods:value }
+                        periods.push(arr);
+                    }
+                });
+
+                console.log(title, cla);
+
+
+            })
+
             $('body').on('change', '.period_per_week', function() {
                 data = JSON.parse($('select[name="setup"]').val())
                 all_per = $('.period_per_week'); sum = 0;
@@ -260,7 +283,7 @@
                     class_setup = $('#class_setup')
                     cla_1 = $(class_setup).find('select[name="class"]')
                     res.classes.map(cla => {
-                        cla_1.append(`<option>${cla.class}</opton>`)
+                        cla_1.append(`<option value="${cla.id}">${cla.class}</opton>`)
                     })
 
                     subject = $('.subject_setup')
