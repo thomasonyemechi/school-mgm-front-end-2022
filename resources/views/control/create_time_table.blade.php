@@ -210,6 +210,12 @@
                 e.preventDefault()
                 title = $(this).find('input[class="form-control"]').val();
                 cla = $(this).find('select[name="class"]').val();
+                setup = JSON.parse($(this).find('select[name="setup"]').val());
+                if(!title || !cla || !setup) {
+                    littleAlert('The title, class and setup fields are require', 1);
+                    return;
+                }
+                sum = 0;
                 all_per = $('.period_per_week'); periods = [];
                 all_per.map(per => {
                     per = all_per[per];
@@ -220,12 +226,34 @@
                         console.log(subject_id);
                         arr = { subject_id:subject_id, periods:value }
                         periods.push(arr);
+                        sum += value;
                     }
                 });
 
-                console.log(title, cla);
+                if(setup.lessons != sum){ littleAlert('You have not reached your subjects limit', 1); return; }
 
 
+                $.ajax({
+                    method: 'post',
+                    url: api_url+'time_table/add',
+                    data: {
+                        setup_id: setup.id,
+                        class_id: cla,
+                        title: title,
+                        periods: periods
+                    },
+                    beforeSend:() =>  {
+                        btnProcess('.class_setup_btn', '', 'before');
+                    }
+                }).done(function(res) {
+                    console.log(res);
+                    littleAlert(res.message);
+                    btnProcess('.class_setup_btn', 'Create Time Table', 'after');
+                }).fail(function(res) {
+                    console.log(res);
+                    parseError(res.responseJSON);
+                    btnProcess('.class_setup_btn', 'Create Time Table', 'after');
+                });
             })
 
             $('body').on('change', '.period_per_week', function() {
@@ -329,7 +357,8 @@
                     setup = $('#class_setup').find('select[name="setup"]')
                     res.data.map(set => {
 
-                        arr = { title: set.title, lessons: set.lesson_periods, breaks: set.break_periods }
+                        arr = { id:set.id, title: set.title, lessons: set.lesson_periods, breaks: set.break_periods }
+                        console.log(arr);
                         setup.append(`<option value='${JSON.stringify(arr)}' >${set.title}</opton>`)
 
                         string = ''
@@ -345,7 +374,6 @@
                             <td><b>Breaks</b><br>${set.break_periods}</td>
                             ${string}
                         `)
-                        console.log(set);
                     })
                 }).fail(function(res) {
                     console.log(res);
