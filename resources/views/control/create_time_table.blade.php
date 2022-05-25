@@ -134,6 +134,17 @@
                                         </form>
                                     </div>
                                 </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title text-bold"></h3>
+                                    </div>
+                                    <div class="card-body p-1">
+                                        <table class="table table-stripped table-hover time_table_set">
+
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -204,6 +215,47 @@
             $('#setup_periods').on('change', function() {
                 displaySetupPeriods(this.value)
             })
+
+            function fetchTimeTableInfo()
+            {
+                $.ajax({
+                    method: 'get',
+                    url: api_url+'time_table/2'
+                }).done(function(res) {
+                    console.log(res.title);
+                    periods = res.periods; body = $('.time_table_set');
+                    periods.map(day => {
+
+                        period_string = ''
+                        day.period.map((per, index) => {
+                            period_string += `
+                                <td class="align-middle align-center"  ${(per.type == 1) ? '' : 'bgcolor="grey"'}>
+                                    ${(per.type == 1) ? `<div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="swap${per.index}" value="${per.index}">
+                                        <label for="swap${per.index}">${per.subject}</label>
+                                    </div>` : `<b>Break</b>` }
+                            `
+                        })
+
+
+                        console.log(day);
+                        body.append(`
+                            <tr>
+                                <td class="align-middle"><b>${day.day}<b></td>
+                                ${period_string}
+                            </tr>
+                        `)
+                    })
+
+
+
+
+                }).fail(function(res) {
+                    console.log(res);
+                })
+            }
+
+            fetchTimeTableInfo();
 
 
             $('#class_setup').on('submit', function(e) {
