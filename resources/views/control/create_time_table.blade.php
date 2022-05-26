@@ -137,12 +137,14 @@
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title text-bold"></h3>
+                                        <h3 class="card-title text-bold">SS 3a Time Table</h3>
                                     </div>
                                     <div class="card-body p-1">
-                                        <table class="table table-stripped table-hover time_table_set">
-
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-stripped table-hover time_table_set">
+                                            </table>
+                                            <button class="btn btn-secondary float-right swapsubjects">Swap Subjects</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -216,13 +218,59 @@
                 displaySetupPeriods(this.value)
             })
 
+            $('.swapsubjects').on('click', function() {
+                table_id = $(this).data('table_id');
+                subjects = $('.swapper'); swaps = []; contents = [];
+                subjects.map(sub => {
+                    sub = subjects[sub];
+
+                    if(sub.checked) {
+                        swaps.push(sub.value);
+                        label = $(sub.parentNode).find('label')[0]
+                        arr = { input_id: sub.id, input_val: sub.value, label: label.innerText }
+                        contents.push(arr);
+                    }
+                });
+                if(swaps.length != 2) { littleAlert('Select two subjects to swap', 1); return; }
+
+                $.ajax({
+                    method: 'POST',
+                    url: api_url+'time_table/swap',
+                    data: {
+                        time_table_id: table_id,
+                        index_1 : swaps[0],
+                        index_2 : swaps[1],
+                    },
+                    beforeSend:() => {
+                        btnProcess('.swapsubjects', '', 'before');
+                    }
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess('.swapsubjects', 'Swap Subjects', 'after');
+                    //manipulate Dom
+                    id_one = contents[0].input_id; id_two = contents[1].input_id;
+                    $(`#`+id_one).val(contents[1].input_val); $(`#`+id_two).val(contents[0].input_val);
+                    label_one = `label[for="${id_one}"]`; label_two = `label[for="${id_two}"]`;
+                    $(label_one).html(contents[1].label); $(label_two).html(contents[0].label);
+                    $(`#`+id_one).removeAttr('checked');
+                }).fail(function(res) {
+                    parseError(res.responseJSON);
+                    btnProcess('.swapsubjects', 'Swap Subjects', 'after');
+                })
+            })
+
+
+
+
             function fetchTimeTableInfo()
             {
                 $.ajax({
                     method: 'get',
                     url: api_url+'time_table/2'
                 }).done(function(res) {
+
                     console.log(res.title);
+                    $('.swapsubjects').attr('data-table_id', res.id);
                     periods = res.periods; body = $('.time_table_set');
                     periods.map(day => {
 
@@ -231,9 +279,10 @@
                             period_string += `
                                 <td class="align-middle align-center"  ${(per.type == 1) ? '' : 'bgcolor="grey"'}>
                                     ${(per.type == 1) ? `<div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="swap${per.index}" value="${per.index}">
+                                        <input type="checkbox" class="swapper" id="swap${per.index}" value="${per.index}">
                                         <label for="swap${per.index}">${per.subject}</label>
                                     </div>` : `<b>Break</b>` }
+                                </td>
                             `
                         })
 
@@ -246,10 +295,6 @@
                             </tr>
                         `)
                     })
-
-
-
-
                 }).fail(function(res) {
                     console.log(res);
                 })
@@ -260,8 +305,8 @@
 
             $('#class_setup').on('submit', function(e) {
                 e.preventDefault()
-                title = $(this).find('input[class="form-control"]').val();
-                cla = $(this).find('select[name="class"]').val();
+                title = $(this).find('input[class="form-control"]');
+                cla = $(this).find('select[name="class"]');
                 setup = JSON.parse($(this).find('select[name="setup"]').val());
                 if(!title || !cla || !setup) {
                     littleAlert('The title, class and setup fields are require', 1);
@@ -281,17 +326,14 @@
                         sum += value;
                     }
                 });
-
                 if(setup.lessons != sum){ littleAlert('You have not reached your subjects limit', 1); return; }
-
-
                 $.ajax({
                     method: 'post',
                     url: api_url+'time_table/add',
                     data: {
                         setup_id: setup.id,
-                        class_id: cla,
-                        title: title,
+                        class_id: cla.val(),
+                        title: title.val(),
                         periods: periods
                     },
                     beforeSend:() =>  {
@@ -301,6 +343,9 @@
                     console.log(res);
                     littleAlert(res.message);
                     btnProcess('.class_setup_btn', 'Create Time Table', 'after');
+                    $('.period_per_week').prop('selectedIndex',0)
+                    title.val(``)
+                    cal.prop('selectedIndex',0)
                 }).fail(function(res) {
                     console.log(res);
                     parseError(res.responseJSON);
@@ -351,7 +396,6 @@
                     <span>Used: <b>0 of ${data.lessons}</b></span>
                 `)
             })
-
 
             function fetchTimeTableReq()
             {
@@ -404,6 +448,7 @@
                 }).done(function(res) {
                     console.log(res);
                     body = $('.recent_setups');
+                    body.html(``);
 
                     //apen for others
                     setup = $('#class_setup').find('select[name="setup"]')
@@ -504,9 +549,6 @@
                     i++;
                 }
             }
-
-
-
 
         })
     </script>
