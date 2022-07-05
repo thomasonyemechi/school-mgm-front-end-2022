@@ -6,6 +6,12 @@
 
 
 @section('page_content')
+
+<style>
+    .comp { position: relative; width: max-content}
+    .comp img { display: block; }
+    .comp i { position: absolute; bottom:10px; right:10px; }
+</style>
     <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
 
@@ -190,6 +196,31 @@
         </div>
     </div>
 
+    <div class="modal fade" id="changeImageModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title text-bold">Upload Image</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="changeImage" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="id">
+                            <input type="file" name="image" class="form-control" accept="image/*"  onchange="loadFile(event)">
+                        </div>
+                        <p><img id="output" width="200" /></p>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-secondary float-right changeImageBtn ">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/results.js') }}"></script>
@@ -203,6 +234,8 @@
             });
 
 
+
+
             function fetchStudent() {
                 $.ajax({
                     method: 'get',
@@ -211,12 +244,17 @@
                     data = res.data
                     pc = $('.p-card')
 
+                    $('.changeImage').find('input[name="id"]').val(data.id);
+
                     status_btn = $(data.status == 0) ? `<button class="btn btn-success btn-block"><b> <i class="fa fa-user-check"></i> Activate</b></button>`
                      : `<button class="btn btn-success btn-block"><b> <i class="fa fa-user-times"></i> De-activate</b></button>`;
                     pc.html(`
-                        <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle"
-                                src="${api_url_root+data.photo}" alt="User profile picture">
+                        <div class="d-flex justify-content-center upload_new_img">
+                            <div class="text-center comp">
+                                <img class="profile-user-img img-fluid img-circle object-cover"
+                                    src="${api_url_root+data.photo}" alt="User profile picture">
+                                <i class="fas fa-upload "></i>
+                            </div>
                         </div>
                         <h3 class="profile-username text-center">${data.surname+' '+data.firstname+' '+data.othername}</h3>
                         <p class="text-muted text-center">${(data.class)? data.class.class :''}<sup>${(data.arm)? data.arm.arm :''}</sup> | ${data.sex}</p>
@@ -224,6 +262,7 @@
                         <a class="btn btn-primary btn-block" href="#settings" data-toggle="tab"><b> <i class="fas fa-edit"></i> Edit Profile</b></a>
                     `);
 
+                    //
                     activityTap(data)
                     settingTab(data)
 
@@ -237,13 +276,15 @@
             fetchStudent();
 
 
+            $('body').on('click', '.upload_new_img', function() {
+                $('#changeImageModal').modal('show');
+            })
 
             function activityTap(data) {
                 body = $('#activity')
                 guard = data.guardian
                 ot = JSON.parse(data.others)
                 body.html(`
-
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -377,6 +418,7 @@
                     </div>
                 `)
             }
+
 
 
             function settingTab(data){
@@ -530,6 +572,29 @@
                 `)
             }
 
+
+
+            $('.changeImage').on('submit', function(e) {
+                e.preventDefault();
+                formData = new FormData(this);
+                $.ajax({
+                    method: 'POST',
+                    url: api_url+'student/update_photo',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        btnProcess('.changeImageBtn', '', 'before')
+                    },
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess('.changeImageBtn', 'Update', 'after')
+                    fetchStudent(); $('#changeImageModal').modal('hide');
+                }).fail(function(res) {
+                    btnProcess('.changeImageBtn', 'Update', 'after')
+                    littleAlert(res.responseJSON);
+                })
+            })
 
 
             $('body').on('click', '.auth_det', function(e) {
@@ -926,6 +991,16 @@
 
         })
     </script>
+
+
+
+    <script>
+        var loadFile = function(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+
 
 
 @endsection

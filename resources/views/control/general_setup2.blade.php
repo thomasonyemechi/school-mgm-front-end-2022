@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">E-mail</label>
-                                <input type="text" class="form-control" disabled value="{{user()->school->email}}">
+                                <input type="email" class="form-control" disabled value="{{user()->school->email}}">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="">Website</label>
@@ -104,12 +104,12 @@
 
                             <div class="col-md-6 form-group">
                                 <label for="">Phone Number</label>
-                                <input type="url" class="form-control" placeholder="Phone Number" value="{{user()->school->phone}}">
+                                <input type="text" class="form-control" placeholder="Phone Number" value="{{user()->school->phone}}">
                             </div>
 
                             <div class="col-md-6 form-group">
                                 <label for="">Alternative Phone Number</label>
-                                <input type="url" class="form-control" placeholder="Phone Number" value="{{user()->school->alternate_phone}}">
+                                <input type="text" class="form-control" placeholder="Phone Number" value="{{user()->school->alternate_phone}}">
                             </div>
 
                             <div class="col-md-12 form-group">
@@ -124,7 +124,7 @@
 
 
                             <div class="form-group col-md-12 mb-0 ">
-                                <button type="submit"  class="btn btn-secondary float-right">Update School Info</button>
+                                <button type="button"  class="btn btn-secondary float-right">Update School Info</button>
                             </div>
                         </form>
 
@@ -132,10 +132,10 @@
                         <b>Update School Logo</b>
                         <div>
                             <div class="mt-2 d-flex justify-content-center">
-                                <img src="{{env('API_ROOT_URL').user()->school->logo}}" alt="SchoolPetal Logo" class="brand-image img-circle elevation-3" style="opacity: .5">
+                                <img width="100%" src="{{env('API_ROOT_URL').user()->school->logo}}" alt="SchoolPetal Logo" class="brand-image img-circle elevation-3" style="opacity: .5">
 
                             </div>
-                            <button class="btn btn-secondary btn-block mt-5">Upload New Photo</button>
+                            <button class=" uploadSchoolPics btn btn-secondary btn-block mt-5">Upload New Photo</button>
                         </div>
                     </div>
                 </div>
@@ -179,6 +179,31 @@
         </div>
     </div>
 
+    <div class="modal fade" id="uploadPicsModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p  class="modal-title text-bold">Upload School Logo</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadPics" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <input type="file" name="logo" class="form-control">
+                        </div>
+                        <div class="form-group float-right">
+                            <button type="submit" class="uploadPics btn btn-secondary" >Save changes</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 
@@ -192,6 +217,37 @@
             });
 
 
+            $('.uploadSchoolPics').on('click', function(){
+                $('#uploadPicsModal').modal('show')
+            })
+
+
+            $('#uploadPics').on('submit', function(e) {
+                e.preventDefault();
+                sbtn = $('.uploadPics');
+                formData = new FormData(this);
+
+                $.ajax({
+                    method: 'POST',
+                    url: api_url+`school/updatelogo`,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        btnProcess(sbtn, '', 'before');
+                    },
+                }).done(function(res) {
+                    littleAlert(res.message);
+                    btnProcess(sbtn, 'Save changes', 'after');
+                    setTimeout(() => {
+                        littleAlert('Logo will appear on you next login')
+                    }, 1500);
+                }).fail(function(res) {
+                    parseError(res.responseJSON);
+                    btnProcess(sbtn, 'Save changes', 'after');
+                    console.log(res);
+                })
+            })
 
 
             function fetchSession()

@@ -86,7 +86,7 @@
                                     <div class="card-body pb-1 box-profile">
                                         <div class="text-center">
                                             <img class="profile-user-img img-fluid img-circle"
-                                                src="${api_url_root+'assets/img/students/user.png'}" alt="${stu.firstname}">
+                                                src="${api_url_root+stu.photo}" alt="${stu.firstname}">
                                         </div>
                                         <h3 class="profile-username text-center">${stu.surname + ' ' +stu.firstname}</h3>
                                         <p class="text-muted mb-0 text-center">${stu.class.class} <sup>${(stu.arm)? stu.arm.arm :''}</sup> | ${stu.sex}</p>
