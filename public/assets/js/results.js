@@ -1,7 +1,7 @@
 function ResultTemplate(result, set) {
     school = result.school;
 
-    title = result.surname + ' ' + result.firstname + ' ' + result.othername;
+    title = `${result.surname} ${result.firstname} ${(result.othername == null || result.othername=='' || result.othername == 'null') ? '' : result.othername}  `;
     data = { id: result.others.result_id, name: title, p_rem: result.others.principal_remark, t_rem: result.others.teacher_remark }
 
     subject_string = ''
@@ -62,25 +62,27 @@ function ResultTemplate(result, set) {
     <p class="p-0 m-0" style="page-break-before: always">
     <div class="card">
         <div class="card-body p-1">
-            <div style="border: solid thin #CCC" class="mb-1 p-2">
+            <div style="border: solid thin #000" class="mb-1 p-2">
                 <table class="" width="100%">
                     <tr>
                         <th>
                             <table width="100%">
                                 <tr>
-                                    <td>
+                                    <td width="15%">
                                         <img width="100" class="img-circle" src="${api_url_root+school.logo}">
                                     </td>
-                                    <td width="50%">
+                                    <td width="70%">
                                         <div class="text-center">
                                             <h1 style="font-size: 25px; font-weight:bold;" class="mb-0">
                                                 ${school.name}</h1>
                                                 <p class="mb-0">${(school.address == null || school.address=='' || school.address == 'null') ? '' : school.address} </p>
-                                            <h3 style="font-size: 15px;" class="mt-0">TERMLY CONTINOUS
+                                            <h3 style="font-size: 20px;" class="mt-0">TERMLY CONTINOUS
                                                 ASSESSMENT DOSSIER <br>${term_text(result.term.term)}, ${result.term.session} ACADEMIC SESSION </h3>
                                         </div>
                                     </td>
-                                    <td width="25%"></td>
+                                    <td width="15%">
+                                        <img width="100" class="img-circle float-right" src="${api_url_root+result.photo}">
+                                    </td>
                                 </tr>
                             </table>
                         </th>
@@ -90,23 +92,18 @@ function ResultTemplate(result, set) {
             </div>
 
             <table class="table table-bordered mb-1">
-                <thead>
                     <tr>
-                        <td colspan="4"><b>Name:</b> ${title}</td>
-                        <td colspan="4"><b>Class:</b> ${result.others.class}</td>
-                        <td colspan="4"><b>Gender:</b> ${result.sex}</td>
+                        <td ><b>NAME:</b> ${title}</td>
+                        <td ><b>REGISTRATION NO:</b> ${result.id}</td>
+                        <td ><b>RESULT ID:</b> ${result.others.result_id}</td>
+                        <td ><b>CLASS:</b> ${result.others.class}</td>
+                        <td ><b>GENDER:</b> ${result.sex}</td>
                     </tr>
-                </thead>
             </table>
 
             <table class="table table-bordered mb-1">
-                <thead>
                     ${head}
-                </thead>
-                <tbody>
                     ${subject_string}
-                </tbody>
-
             </table>
 
             <table class="table table-bordered">

@@ -1987,12 +1987,12 @@ pre code {
 }
 
 .table-bordered {
-    border: 1px solid #dee2e6
+    border: 1px solid #000
 }
 
 .table-bordered td,
 .table-bordered th {
-    border: 1px solid #dee2e6
+    border: 1px solid #000
 }
 
 .table-bordered thead td,
@@ -11195,7 +11195,7 @@ a.text-dark:hover {
     }
     .table-bordered td,
     .table-bordered th {
-        border: 1px solid #dee2e6!important
+        border: 1px solid #000 !important
     }
     .table-dark {
         color: inherit
