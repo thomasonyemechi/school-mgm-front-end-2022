@@ -75,7 +75,7 @@ function ResultTemplate(result, set) {
                                         <div class="text-center">
                                             <h1 style="font-size: 25px; font-weight:bold;" class="mb-0">
                                                 ${school.name}</h1>
-                                            <p class="mb-0">${school.address} </p>
+                                                <p class="mb-0">${(school.address == null || school.address=='' || school.address == 'null') ? '' : school.address} </p>
                                             <h3 style="font-size: 15px;" class="mt-0">TERMLY CONTINOUS
                                                 ASSESSMENT DOSSIER <br>${term_text(result.term.term)}, ${result.term.session} ACADEMIC SESSION </h3>
                                         </div>
